@@ -10,7 +10,7 @@ namespace Ui {
 class AddItem;
 }
 
-class AddItem : public QWidget
+class AddItem : public QDialog
 {
     Q_OBJECT
 

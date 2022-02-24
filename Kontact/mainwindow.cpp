@@ -7,8 +7,10 @@
 #include "widgets/removeitem.h"
 #include "widgets/modifyitem.h"
 #include "widgets/finditem.h"
+#include "widgets/statistics.h"
 
 extern studentsList *sList;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -26,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     QAction *removeItemAction = menuEdit->addAction("Remove");
     QAction *modifyItemAction = menuEdit->addAction("Modify");
     QAction *findItemAction = menuEdit->addAction("Find");
-
+    QAction *statisticsAction = menuEdit->addAction("Statistics");
     ui->statusbar->addWidget(currentFile);
     ui->menuKontact->addSeparator();
     ui->menubar->addSeparator();
@@ -47,6 +49,11 @@ MainWindow::MainWindow(QWidget *parent)
         QWidget *newWin = new removeItem(this);
         newWin->setAttribute(Qt::WA_DeleteOnClose);
         newWin->show();
+    });
+    connect(statisticsAction, &QAction::triggered, [=](){
+       QWidget *newWin = new  statistics(this);
+       newWin->setAttribute(Qt::WA_DeleteOnClose);
+       newWin->show();
     });
     connect(ui->actionCreat, &QAction::triggered, [=]() {
         currentFile->setText("File: "+ tr(sList->listName.c_str()));
@@ -73,6 +80,41 @@ MainWindow::MainWindow(QWidget *parent)
         QWidget *newWin = new AddItem();
         newWin->setAttribute(Qt::WA_DeleteOnClose);
         newWin->show();
+    });
+
+
+
+    connect(ui->fileButton, &QPushButton::pressed, [=](){
+       QWidget *fileWin = new CreatNewContact(this);
+       fileWin->setAttribute(Qt::WA_DeleteOnClose);
+       fileWin->show();
+    });
+
+    connect(ui->addButton, &QPushButton::pressed, [=](){
+       QWidget *addWin = new AddItem(this);
+       addWin->setAttribute(Qt::WA_DeleteOnClose);
+       addWin->show();
+    });
+
+    connect(ui->modifyButton, &QPushButton::pressed, [=](){
+        QWidget *modifyWin = new ModifyItem(this);
+        modifyWin->setAttribute(Qt::WA_DeleteOnClose);
+        modifyWin->show();
+    });
+    connect(ui->removeButton, &QPushButton::pressed, [=](){
+        QWidget *removeWin = new removeItem(this);
+        removeWin->setAttribute(Qt::WA_DeleteOnClose);
+        removeWin->show();
+    });
+    connect(ui->findButton, &QPushButton::pressed, [=](){
+        QWidget *findWin = new FindItem(this);
+        findWin->setAttribute(Qt::WA_DeleteOnClose);
+        findWin->show();
+    });
+
+    connect(ui->refreshButton, &QPushButton::pressed, [=](){
+        if (currentFile->text() == tr("Untitled")) return;
+        sList->loadJson();
     });
 
 

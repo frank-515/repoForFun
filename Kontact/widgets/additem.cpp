@@ -4,7 +4,7 @@
 extern studentsList *sList;
 
 AddItem::AddItem(QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::AddItem)
 {
     ui->setupUi(this);
@@ -47,7 +47,7 @@ AddItem::AddItem(QWidget *parent) :
         qDebug() << "personAdded: " << *personAdded;
     };
 
-    //包括用户体验的一些优化
+    //包括用户体验的一些优化,不知道为啥这在macOS上不起作用，Ubuntu正常
     connect(ui->doneButton, &QPushButton::clicked, [=]() mutable{
         QMessageBox::information(this, tr("Info"), QString("%1 item(s) added to list %2.").arg(*personAdded).arg(sList->listName.c_str()));
         this->close();
