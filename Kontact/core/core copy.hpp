@@ -6,7 +6,7 @@ using studentName_t = std::string;
 using phoneNumber_t = std::string;
 using className_t = std::string;
 using namespace configor;
-
+//这个版本包括了学号的储存
 class Student{
 public:
     studentName_t studentName;
