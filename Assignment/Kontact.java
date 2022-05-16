@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Kontact {
         public static void main(String[] args) throws Exception {
-            var CLI = new CLInterface();
+            new CLInterface();
         }
 }
 
@@ -18,6 +18,9 @@ class Date {
             yy = Integer.parseInt(v[0]);
             mm = Integer.parseInt(v[1]);
             dd = Integer.parseInt(v[2]);
+            if (yy.toString().length() != 4 || mm.toString().length() >= 2 || dd.toString().length() >= 2 || mm.toString().length() == 0 || dd.toString().length() == 0) {
+                throw new Exception("Invalid number of date");
+            }
         }
         finally {}
     }
@@ -114,7 +117,7 @@ class CLInterface {
     }
     private static void start() {
         clearConsole();
-        puts("CmmandLine: -arlfm, --save, --load, --version, -h for more information");
+        puts("Command Line: -arlfm, --save, --load, --version, -h for more information");
     }
     private void add() {
         clearConsole();
@@ -287,10 +290,12 @@ class CLInterface {
                     break;
                 case "-a":
                 case "--add":
+                    isSaved = false;
                     add();
                 break;
                 case "-r":
                 case "--remove":
+                    isSaved = false;
                     remove();
                     break;
                 case "-f":
@@ -299,10 +304,12 @@ class CLInterface {
                     break;
                 case "-m":
                 case "--modify":
+                    isSaved = false;
                     modify();
                     break;
                 case "--save":
                     save(sc.next());
+                    isSaved = true;
                     break;
                 case "--load":
                     load(sc.next());
