@@ -18,7 +18,7 @@ class Date {
             yy = Integer.parseInt(v[0]);
             mm = Integer.parseInt(v[1]);
             dd = Integer.parseInt(v[2]);
-            if (yy.toString().length() != 4 || mm.toString().length() >= 2 || dd.toString().length() >= 2 || mm.toString().length() == 0 || dd.toString().length() == 0) {
+            if (yy.toString().length() != 4 || mm.toString().length() > 2 || dd.toString().length() > 2 || mm.toString().length() == 0 || dd.toString().length() == 0) {
                 throw new Exception("Invalid number of date");
             }
         }
