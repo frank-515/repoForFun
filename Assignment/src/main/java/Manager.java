@@ -7,14 +7,18 @@ public class Manager {
     public static ArrayList<Student> students = new ArrayList<>();
 
 	public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException, IOException {
-		@SuppressWarnings("resource")
 		File f = new File("学生信息.txt");
-		if (!f.exists()) f.createNewFile();
-		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
-
-		@SuppressWarnings("unchecked")
-		ArrayList<Student> students = (ArrayList<Student>) ois.readObject();
-		//ArrayList<Student> students = new ArrayList<>();
+		ArrayList<Student> students;
+		if (!f.exists()) {
+			f.createNewFile();
+			students = new ArrayList<>();
+		} else {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+			students = (ArrayList<Student>) ois.readObject();
+		}
+		
+		
+		
 		while(true){
 			System.out.println("------------欢迎使用学生成绩管理系统--------------------");
 			System.out.println("---------------【1】录入学生信息-----------------------");
