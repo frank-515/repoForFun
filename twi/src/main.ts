@@ -141,6 +141,23 @@ const authenticateUser = (req: Request, res: Response, next: any) => {
 app.use('/a', authenticateUser) // static hosting 
 app.use('/api/a', authenticateUser) // APIs
 
+// 记录所有访问
+app.use('/', (req: Request, res: Response, next: any) => {
+  const { ip, method, originalUrl, headers } = req;
+  const userAgent = headers['user-agent'];
+  const timestamp = new Date().toISOString();
+  const queryString = `INSERT INTO server_access_log (ip_address, request_url, http_method, user_agent) VALUES (?, ?, ?, ?);`;
+
+  pool.query(queryString, [ip, originalUrl, method, userAgent], (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(`[${timestamp}] IP: ${ip}, URL: ${method} ${originalUrl}`);
+    }
+  });
+  next();
+});
+
 
 app.post('/api/a/post', upload.none(), (req: Request, res: Response) => {
   let prev_tweet_id = req.body.prev_tweet_id ? req.body.prev_tweet_id : 0;
@@ -442,6 +459,47 @@ app.get('/api/u/:user_id/tweets/:page', upload.none(), async (req: Request, res:
     const data = JSON.parse(JSON.stringify(tweets));
   
     res.status(200).json({ success: true, data });
+  });
+});
+
+app.get('/api/a/get-time-line/:page', async(req: Request, res: Response) => {
+  const page = parseInt(req.params.page) || 1;
+  const tweetPerPage = 20;
+  const offset = (page - 1) * tweetPerPage;
+  const limit = tweetPerPage + 1;
+
+  const re = await pool.query(`
+  SELECT t.tweet_id, t.tweet_text, t.tweet_time, t.sender_id, u.username,
+  u.avatar_url, COUNT(DISTINCT l.like_id) AS likes, t.retweet_count
+  FROM tweets t
+  JOIN users u ON t.sender_id = u.user_id
+  LEFT JOIN likes l ON t.tweet_id = l.tweet_id
+  WHERE t.sender_id IN (
+    SELECT followed_id
+    FROM follows
+    WHERE follower_id = ?
+  )
+  GROUP BY t.tweet_id
+  ORDER BY tweet_time DESC
+  LIMIT ?, ?
+  `, [req.body.user_id, offset, limit],
+  function (err: any, results: any) {
+    if (err) {
+      console.error('Failed to get timeline', err);
+      res.status(500).json({ message: 'Failed to get timeline' });
+    }
+    const tweets = results.slice(0, tweetPerPage).map((row: any) => ({
+      tweetId: row.tweet_id,
+      tweetText: row.tweet_text,
+      tweetTime: row.tweet_time,
+      senderId: row.sender_id,
+      senderUsername: row.username,
+      senderAvatarUrl: row.avatar_url,
+      likeCount: row.likes,
+      retweetCount: row.retweet_count
+    }));
+    const hasNextPage = results.length > tweetPerPage;
+    res.json({ tweets, hasNextPage });
   });
 });
 

@@ -91,3 +91,13 @@ FOR EACH ROW
 BEGIN
     UPDATE tweets SET like_count = like_count - 1 WHERE tweet_id = OLD.tweet_id;
 END;
+
+CREATE TABLE server_access_log (
+  log_id INT AUTO_INCREMENT PRIMARY KEY,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  ip_address VARCHAR(45) NOT NULL,
+  request_url TEXT NOT NULL,
+  http_method VARCHAR(10) NOT NULL,
+  http_status SMALLINT UNSIGNED,
+  user_agent TEXT
+);
