@@ -1,0 +1,13 @@
+{
+    "path": {
+        "image": "/home/frank515/twi/data"
+    },
+    "database": {
+        "host": "localhost",
+        "user": "frank515",
+        "password": "frank515",
+        "database": "twi",
+        "connectionLimit": 10
+    }
+
+}
