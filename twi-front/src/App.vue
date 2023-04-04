@@ -3,7 +3,7 @@ import TweetCard from './components/timeline/TweetCard.vue'
 </script>
 
 <template>
-  <HelloWorld/>
+  <TweetCard/>
 </template>
 
 <style scoped>
