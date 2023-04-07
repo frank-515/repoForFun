@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <script src="https://unpkg.com/vue@next"></script>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+    <link rel="stylesheet" href="css/util.css">
+    <!-- import JavaScript -->
+    <script src="js/util.js"></script>
+    <script src="https://unpkg.com/element-plus"></script>
+    <script src="https://unpkg.com/@element-plus/icons-vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <title>Login demo</title>
+</head>
+
+<style type="text/css">
+    .background{
+        background-image: url("img/background1.png");
+        background-size: 100%, 100%;
+    }
+</style>
+
+<body class="background">
+
+<div id="app" class="main">
+
+
+    <el-container>
+
+        <el-dialog v-model="dialogOn"
+                   width="30%"
+                   title="Login"
+                   show-close="false"
+                   center="true"
+                   before-close="function(){return void(0)}"
+                   modal="false">
+            <el-form>
+                <el-input placeholder="Username" v-model="username"></el-input><br><br>
+                <el-input placeholder="Password" type="password" v-model="password"></el-input><br><br>
+                <div>
+                    <el-row>
+                        <el-button v-on:click="reset">Reset</el-button>
+                        <el-button v-on:click="reg">Register</el-button>
+                        <el-button v-on:click="postInfo" type="primary"> > </el-button>
+
+                    </el-row>
+
+                </div>
+            </el-form>
+        </el-dialog>
+
+
+    </el-container>
+</div>
+</body>
+<script>
+    var _username;
+    var _password;
+    const App = {
+        data() {
+            return {
+                username: "",
+                password: "",
+                dialogOn: true
+            };
+        },
+        methods: {
+            reset() {
+                this.username = "";
+                this.password = "";
+            },
+            postInfo() {
+                _username = this.username;
+                _password = this.password;
+                axios.post('/playground/login', {
+                    username: this.username,
+                    password: this.password
+                })
+                    .then(function (response) {
+                        console.log(response)
+                        if (response.data === true) {
+                            // alert("Successfully login.")
+                            setCookie("username", _username, 1)
+                            setCookie("password", _password, 1)
+                            document.location.href = '/playground/home.html';
+                        } else {
+                            alert("Bad username or password.")
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                        alert(error)
+                    })
+            },
+            reg() {
+                axios.post('/playground/register', {
+                    username: this.username,
+                    password: this.password
+                })
+                    .then(function (response) {
+                        console.log(response)
+                        if (response.data === true) {
+                            alert("Successfully registered.")
+                        } else if (response.data === false) {
+                            alert("Failed to register.")
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                        alert(error)
+                    })
+            }
+        }
+    };
+    const app = Vue.createApp(App);
+    app.use(ElementPlus);
+
+
+    app.mount("#app");
+
+</script>
+
+</html>

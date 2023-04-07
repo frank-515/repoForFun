@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <script src="https://unpkg.com/vue@next"></script>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-plus"></script>
+    <title>Element Plus demo</title>
+</head>
+<body>
+    <div id="app">
+        <h1>Index Page.</h1>
+        <el-link type="primary" href="/playground/login.html">Login Page.</el-link>
+    </div>
+</body>
+<script>
+    const App = {
+        data() {
+            return {
+
+            };
+        },
+        methods: {
+
+        }
+    };
+    const app = Vue.createApp(App);
+    app.use(ElementPlus);
+    app.mount("#app");
+
+</script>
+
+</html>

@@ -1,0 +1,34 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="20">
+            <item index="0" class="java.lang.String" itemvalue="nobr" />
+            <item index="1" class="java.lang.String" itemvalue="noembed" />
+            <item index="2" class="java.lang.String" itemvalue="comment" />
+            <item index="3" class="java.lang.String" itemvalue="noscript" />
+            <item index="4" class="java.lang.String" itemvalue="embed" />
+            <item index="5" class="java.lang.String" itemvalue="script" />
+            <item index="6" class="java.lang.String" itemvalue="el-button" />
+            <item index="7" class="java.lang.String" itemvalue="el-input" />
+            <item index="8" class="java.lang.String" itemvalue="el-container" />
+            <item index="9" class="java.lang.String" itemvalue="el-form" />
+            <item index="10" class="java.lang.String" itemvalue="el-dialog" />
+            <item index="11" class="java.lang.String" itemvalue="el-link" />
+            <item index="12" class="java.lang.String" itemvalue="el-aside" />
+            <item index="13" class="java.lang.String" itemvalue="el-header" />
+            <item index="14" class="java.lang.String" itemvalue="el-main" />
+            <item index="15" class="java.lang.String" itemvalue="el-footer" />
+            <item index="16" class="java.lang.String" itemvalue="el-page-header" />
+            <item index="17" class="java.lang.String" itemvalue="el-col" />
+            <item index="18" class="java.lang.String" itemvalue="el-row" />
+            <item index="19" class="java.lang.String" itemvalue="el-image" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+  </profile>
+</component>

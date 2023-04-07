@@ -1,0 +1,8 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "dependencies": {
+    "@element-plus/icons": "^0.0.11",
+    "@element-plus/icons-vue": "^2.0.9"
+  }
+}

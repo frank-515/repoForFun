@@ -1,0 +1,25 @@
+@font-face {
+    font-family: BreeSerif;
+    src: url('../font/BreeSerif-Regular.ttf');
+}
+.main {
+    font-family: BreeSerif, serif;
+}
+
+.home-page-row {
+    padding: 16px;
+
+}
+
+.home-img-icon {
+    padding: 16px;
+    width: 256px;
+    height: 256px;
+    border-radius: 32px;
+}
+
+.home-aside-bg {
+    padding-top: 8px;
+    width: 200px;
+    height: auto;
+}

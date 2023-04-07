@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://unpkg.com/vue@next"></script>
+  <!-- import CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+  <link rel="stylesheet" href="css/util.css">
+  <!-- import JavaScript -->
+  <script src="js/util.js"></script>
+  <script src="https://unpkg.com/element-plus"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <title>Home</title>
+</head>
+
+<body>
+  <div id="app" class="main">
+      <el-page-header @back="goBack">
+          <template #content>
+              <span class="text-large font-600 mr-3">
+                  Home
+              </span>
+          </template>
+          <template #extra>
+              <div class="flex items-center">
+                  <el-button type="primary" class="ml-2" v-on:click="toUserPage">{{username}}</el-button>
+              </div>
+          </template>
+          <el-container>
+              <el-aside width="200px">
+<!--                  <span v-html="adHTML[0]"></span>-->
+                  <span v-html="styleAD ? adHTML[0] : adHTML[1]"></span>
+              </el-aside>
+              <el-main>
+                  <el-col>
+                      <el-row :span="16">
+                          <a href="ServletVerifyUser?uri=backroom.html">
+                              <img src="img/backroom-icon.png" class="home-img-icon">
+                          </a>
+                          <a href="ServletVerifyUser?uri=chatroom.html">
+                              <img src="img/chatroom-icon.png" class="home-img-icon">
+                          </a>
+                            <img :src="styleAD ? adIconSrc[0] : adIconSrc[1]"
+                                 class="home-img-icon"
+                                v-on:click="styleAD = !styleAD">
+                      </el-row>
+
+                  </el-col>
+              </el-main>
+          </el-container>
+          <el-footer>
+
+          </el-footer>
+
+
+
+      </el-page-header>
+  </div>
+</body>
+
+<script>
+
+  const App = {
+    data() {
+      return {
+          str: "test",
+          username: getCookie("username"),
+          adHTML: [
+              "<img src=\"img/apple-wwdc.gif\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/apple-ad1.jpg\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/apple-ad2.jpg\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/apple-ad3.png\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/apple-ad4.jpg\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/poweredbymacosxserver.gif\" style=\"width: 200px\">",
+              "<img src=\"img/xp3.gif\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/xp1.jpg\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/xp2.jpg\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/xp6.jpg\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/xp7.jpg\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/xp8.jpg\" class=\"home-aside-bg\">\n" +
+              "<img src=\"img/xp5.gif\" class=\"home-aside-bg\">"
+              ],
+          adIconSrc: [
+              "img/toWindows.png",
+              "img/toApple.jpg"
+          ],
+          styleAD: true
+
+      };
+    },
+    methods: {
+        goBack() {
+            document.location.href = 'login.html';
+        },
+        toUserPage() {
+            document.location.href = 'ServletVerifyUser?uri=/playground/user.html';
+        }
+    }
+  }
+
+  const vm = Vue.createApp(App);
+  vm.use(ElementPlus)
+  vm.mount("#app")
+
+
+</script>
+
+</html>
