@@ -9,6 +9,18 @@ const props = defineProps({
   text: String,
   imagesUrl: [String],
 });
+
+let text_resolve: string = props.text ? props.text : ""
+const urls = [];
+const regex = /\[img=([^\]]+)\]/g;
+let match = null;
+while ((match = regex.exec(text_resolve)) !== null) {
+  // 提取url内容
+  urls.push(match[1]);
+}
+// 删除所有匹配的内容
+const text_resolved = text_resolve.replace(regex, "");
+console.log(urls); // ["http://example.com/image.jpg", "http://example.com/image2.jpg"]
 </script>
 
 <template>
@@ -25,7 +37,10 @@ const props = defineProps({
         </div>
       </div>
     </div>
-    <div class="tweet-text">{{ text }}</div>
+    <div class="tweet-text">{{ text_resolved }}</div>
+    <span :v-for="(url, index) in urls" :key="index">
+      <el-image class="image-wrapper" :src="url" :fit="fit"></el-image>
+    </span>
   </div>
 </template>
 
@@ -46,6 +61,7 @@ const props = defineProps({
 
 .tweet-text {
   padding-left: 40px;
+  padding-bottom: 10px;
 }
 
 </style>
