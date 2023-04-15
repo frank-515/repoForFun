@@ -1,7 +1,17 @@
 
+<template>
+  <div>
+    <ul class="tweets-list" v-infinite-scroll="onLoad" infinite-scroll-delay="1000" infinite-scroll-distance="300">
+      <span class="tweet-wrapper" v-for="item in tweets" :key="item.user_id">
+        <TweetCard :user_id="item.user_id" :username="item.username" :text="item.text" :avatarUrl="item.avatarUrl" />
+      </span>
+    </ul>
+  </div>
+</template>
+
 <script setup lang="ts">
 import TweetCard from "./TweetCard.vue";
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 
 interface Tweet {
   user_id: string;
@@ -26,20 +36,34 @@ const props = defineProps({
   },
 });
 
-const onLoad = () => {
-  console.log('Infinite scrolling');
-};
-</script>
+const tweets = ref(props.tweets);
 
-<template>
-  <div>
-    <ul v-infinite-scroll="onLoad" v-for="item in props.tweets" :key="item.user_id">
-      <span class="tweet-wrapper">
-        <TweetCard :user_id="item.user_id" :username="item.username" :text="item.text" :avatarUrl="item.avatarUrl" />
-      </span>
-    </ul>
-  </div>
-</template>
+const onLoad = async () => {
+  // 发起异步请求获取新的 tweets 数据
+  const newTweets = await fetchNewTweets();
+  
+  // 将新数据合并到现有的 tweets 数组中
+  tweets.value.push(...newTweets);
+};
+
+const fetchNewTweets = async(): Promise<Tweet[]> => {
+  // 发起异步请求获取新的 tweets 数据
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve([
+        {
+          user_id: 'user',
+          username: 'frank515',
+          text: 'test',
+          avatarUrl: '',
+          imagesUrl: ['']
+        },
+      ]);
+    }, 1000);
+  })
+};
+
+</script>
 
 <style scoped>
 .tweet-wrapper {
@@ -50,5 +74,11 @@ const onLoad = () => {
   border-radius: 5px;
   text-align: left;
   word-wrap: break-word;
+}
+
+.tweets-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 </style>
