@@ -1,8 +1,19 @@
-<script setup>
+
+<script setup lang="ts">
 import TweetCard from "./TweetCard.vue";
+import { defineProps } from 'vue';
+
+interface Tweet {
+  user_id: string;
+  username: string;
+  avatarUrl: string | undefined;
+  text: string;
+  imagesUrl: string[] | undefined;
+}
+
 const props = defineProps({
   tweets: {
-    type: Array,
+    type: Array as () => Tweet[],
     default: () => [
       {
         user_id: '',
@@ -10,20 +21,23 @@ const props = defineProps({
         avatarUrl: '',
         text: '',
         imagesUrl: [],
-      }
-    ]
-  }
+      },
+    ],
+  },
 });
+
+const onLoad = () => {
+  console.log('Infinite scrolling');
+};
 </script>
 
 <template>
   <div>
-    <span v-for="(item, index) in tweets" :key="index">
-		<span class="tweet-wrapper">
-			<TweetCard :user_id="item.user_id" :username="item.username" :text="item.text" :avatarUrl="item.avatarUrl" />
-		</span>
-		
-	</span>
+    <ul v-infinite-scroll="onLoad" v-for="item in props.tweets" :key="item.user_id">
+      <span class="tweet-wrapper">
+        <TweetCard :user_id="item.user_id" :username="item.username" :text="item.text" :avatarUrl="item.avatarUrl" />
+      </span>
+    </ul>
   </div>
 </template>
 
