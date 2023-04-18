@@ -16,13 +16,13 @@ const props = defineProps({
   userProfile: {
     type: Object as () => userProfileType,
     default: () => ({
-      user_id: "frank515",
-      username: "frank51515",
+      user_id: "",
+      username: "",
       avatarUrl: defaultAvatarURL,
-      bio: "智械危机前是个程序员，关注我桥下煎饼打八折喔！我爱煎饼更爱你！😁",
+      bio: "",
       banner: defaultBannerURL,
-      following: 11541,
-      followers: 2133,
+      following: 0,
+      followers: 0,
     }),
   },
 });
