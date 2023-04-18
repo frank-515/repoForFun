@@ -21,8 +21,8 @@ const props = defineProps({
       avatarUrl: defaultAvatarURL,
       bio: "智械危机前是个程序员，关注我桥下煎饼打八折喔！我爱煎饼更爱你！😁",
       banner: defaultBannerURL,
-      following: 0,
-      followers: 0,
+      following: 11541,
+      followers: 2133,
     }),
   },
 });
@@ -72,14 +72,14 @@ const props = defineProps({
         <el-col :span="8">
           <div>
             <p class="user-statistics">
-              {{ props.userProfile.following }}<span /> following
+              <strong>{{ props.userProfile.following }}</strong><span /> following
             </p>
           </div>
         </el-col>
         <el-col :span="8">
           <div>
             <p class="user-statistics">
-              {{ props.userProfile.following }}<span /> following
+              <strong>{{ props.userProfile.following }}</strong><span /> following
             </p>
           </div>
         </el-col>
@@ -101,6 +101,7 @@ const props = defineProps({
   margin: 15px;
   padding-left: 6ex;
   bottom: 2ex;
+  font: bolder;
 }
 .username-id {
   text-align: left;
