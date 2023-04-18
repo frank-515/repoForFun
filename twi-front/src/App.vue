@@ -1,13 +1,14 @@
 <script setup lang="ts">
 // import TweetCard from './components/timelinePage/TweetCard.vue'
 // import TimelineList from './components/timelinePage/TimelineList.vue';
-import UserProfile from './components/homePage/UserProfile.vue';
+// import UserProfile from './components/homePage/UserProfile.vue';
+import UserHomePage from './components/homePage/UserHomePage.vue'
 
 </script>
 
 <template>
   <div class="wrapper">
-    <UserProfile></UserProfile>
+    <UserHomePage></UserHomePage>
   </div>
 </template>
 
@@ -16,10 +17,10 @@ import UserProfile from './components/homePage/UserProfile.vue';
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
   top: 0;
   left: 0;
-  width: 50%;
+  min-width: 640px;
+  width: 100%;
   height: 100%;
 }
 
