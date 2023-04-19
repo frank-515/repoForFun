@@ -69,7 +69,6 @@
   .tweet-wrapper {
     width: auto;
     min-width: 300px;
-    max-width: 400px;
     padding: 5px;
     border-radius: 5px;
     text-align: left;

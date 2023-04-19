@@ -33,9 +33,9 @@ const props = defineProps({
     <el-image
       class="banner"
       style="width: 100%; height: 180px;"
-      :fit="fit"
+      fit="cover"
       :src="
-        props.userProfile.banner ? props.userProfile.banner : defaultBannerURL
+        props.userProfile.banner ? props.userProfile.banner.toString() : defaultBannerURL
       "
     />
     <div class="user-card">
@@ -44,11 +44,7 @@ const props = defineProps({
           <el-avatar
             class="avatar"
             :size="60"
-            :src="
-              props.userProfile.avatarUrl
-                ? props.userProfile.avatarUrl
-                : defaultAvatarURL
-            "
+            :src="props.userProfile.avatarUrl ? props.userProfile.avatarUrl.toString() : defaultAvatarURL"
           ></el-avatar>
         </el-col>
         <el-col :span="18" class="username-id">
