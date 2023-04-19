@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "axios": "^1.3.5",
     "element-plus": "^2.3.2",
     "file-loader": "^6.2.0",
     "pinia": "^2.0.33",
+    "unplugin-icons": "^0.16.1",
     "url-loader": "^4.1.1",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
