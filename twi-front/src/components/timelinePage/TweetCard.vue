@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import default_avatar_url from "../../assets/default_avatar.png";
 import { defineProps } from 'vue';
+import exampleImg from "../../assets/default_banner.jpg";
 const default_avatar = document.createElement("img");
 
 const props = defineProps({
@@ -25,6 +26,19 @@ while ((match = regex.exec(text_resolved)) !== null) {
 // 删除所有匹配的内容
 const text_resolved_filtered = text_resolved.replace(regex, "");
 console.log(urls); // ["http://example.com/image.jpg", "http://example.com/image2.jpg"]
+
+const onStar = () => {
+  alert("onStar");
+}
+const onRetweet = () => {
+  alert("onRetweet");
+}
+const onReply = () => {
+ alert("onReply");
+}
+const onShare = () => {
+  alert("onShare");
+}
 </script>
 
 <template>
@@ -43,8 +57,17 @@ console.log(urls); // ["http://example.com/image.jpg", "http://example.com/image
     </div>
     <div class="tweet-text">{{ text_resolved_filtered }}</div>
     <span v-for="(url, index) in urls" :key="index">
-      <el-image class="image-wrapper" :src="url" fit="fit"></el-image>
+      <img class="image-wrapper" :src="url" fit="fit">
     </span>
+    <el-row :gutter="20">
+      <el-col :span="14"></el-col>
+        <el-col :span="2"><el-icon><ChatLineSquare :onclick="onReply"/></el-icon></el-col>
+      <el-col :span="2"><el-icon><Star :onclick="onStar"/></el-icon></el-col>
+      <el-col :span="2"><el-icon><Refresh :onclick="onRetweet"/></el-icon></el-col>
+      <el-col :span="2"><el-icon><Share :onclick="onShare"/></el-icon></el-col>
+      <el-col :span="2"></el-col>
+    </el-row>
+    <hr class="divider"/>
   </div>
 </template>
 
@@ -67,7 +90,25 @@ console.log(urls); // ["http://example.com/image.jpg", "http://example.com/image
   padding-left: 40px;
   padding-bottom: 10px;
 }
+.image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 180px;
+  border-radius: 5px;
+  border: 1px solid #666;
+  overflow: hidden;
+}
 
+.image-wrapper img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.icon-pressed {
+  text-shadow: rgba(255,162,0,0.9) 0px 0px 7px;
+}
 </style>
 
 <!-- 对代码进行了如下修正：
