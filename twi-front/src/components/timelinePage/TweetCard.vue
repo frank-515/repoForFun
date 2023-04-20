@@ -72,6 +72,15 @@ const onShare = () => {
 </template>
 
 <style scoped>
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  opacity: 0.5;
+  clip-path: polygon(5% 0, 95% 0, 95% 100%, 5% 100%);
+  position: relative;
+  top: 1ex;
+}
 .user-input-container {
   display: flex;
 }
