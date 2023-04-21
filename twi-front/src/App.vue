@@ -3,23 +3,19 @@
 // import TimelineList from './components/timelinePage/TimelineList.vue';
 // import UserProfile from './components/homePage/UserProfile.vue';
 // import UserHomePage from './components/homePage/UserHomePage.vue'
-import NewTweet from './components/NewTweet.vue';
+// import NewTweet from './components/NewTweet.vue';
+import MainPage from './components/MainPage.vue';
 </script>
 
 <template>
   <div class="wrapper">
-    <NewTweet></NewTweet>
+    <MainPage></MainPage>
   </div>
 </template>
 
 <style scoped>
 .wrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  left: 0;
-  min-width: 640px;
   width: 100%;
   height: 100%;
   background-color: #1c1c1c;
