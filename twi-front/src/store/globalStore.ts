@@ -6,7 +6,9 @@ export const useUserStore = defineStore('user', () => {
       user_id: '',
       username: '',
       avatarUrl: '',
-      bio: ''
+      bio: '',
+      followers: 0,
+      following: 0
     }
   }
 
