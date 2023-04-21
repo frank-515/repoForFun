@@ -2,11 +2,10 @@
   <el-card class="box-card">
     <template #header>
       <div class="card-header">
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <span><p><strong>撰写推文</strong></p></span>
-          </el-col>
-        </el-row>
+                    
+        <span v-if="props.replyToUserID.length !== 0" ><p><strong>Reply to @{{ props.replyToUserID }}</strong></p></span>
+            <span v-if="props.replyToUserID.length === 0" ><p><strong>Write new tweet</strong></p></span>
+
       </div>
     </template>
     <template #default>
@@ -28,9 +27,9 @@
            type="primary" 
            round :disabled="tweetText.length === 0"
            :onClick="onSend">
-           
-           发送推文
+           Post
           </el-button>
+          
         </div>
       </div>
     </template>
@@ -40,6 +39,17 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { ElNotification } from 'element-plus'
+
+const props = defineProps({
+  replyToTweet: {
+    type: String,
+    default: "",
+  },
+  replyToUserID: {
+    type: String,
+    default: ""
+  }
+});
 
 const tweetText = ref("");
 const maxLength = 144; // 推文最大长度
@@ -52,6 +62,10 @@ const onSend = () => {
 </script>
 
 <style scoped>
+.card-header {
+  display: flex;
+
+}
 .word-count {
   margin: 20px;
   color: #888888;
