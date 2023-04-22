@@ -5,7 +5,7 @@ import NewTweet from "./components/NewTweet.vue";
 
 const routes = [
     {path: '/timeline', component: TimelineList},
-    {path: '/profile', component: UserHomePage},
+    {path: '/home', component: UserHomePage},
     {path: '/write', component: NewTweet}
 ]
 
