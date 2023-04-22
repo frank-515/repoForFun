@@ -1,38 +1,78 @@
 <script setup lang="ts">
 import TimelineList from './timelinePage/TimelineList.vue';
 import { useUserStore } from '../store/globalStore'
-
-const UserStore = useUserStore();
+import defaultAvatarUrl from '../assets/default_avatar.png'
+const userStore = useUserStore();
+const username = userStore.state.user.username
+const avatarUrl = userStore.state.user.avatarUrl
+const toHome = () => {
+	alert('To Home')
+}
+const toProfile = () => {
+	alert('To Profile')
+}
 </script>
 
 <template>
-  <div class="common-layout">
-    <el-container>
-			<div class="outter-container">
-      <el-header>
-				<p>Twine</p>
-			</el-header>
-      <el-aside width="200px">Aside</el-aside>
-      <el-main>Main</el-main>
-			</div>
-    </el-container>
-  </div>
+	<div class="common-layout">
+		<el-page-header @back="toHome" class="header-style">
+			<template #content >
+				<div class="header-layout" @click="toProfile">
+					<el-avatar class="avatar-style" 
+					:src="avatarUrl ? avatarUrl : defaultAvatarUrl">
+					</el-avatar>
+					<p > {{ username }} </p>
+				</div>
+				
+			</template>
+			<template #icon>
+				<p class="home-logo" style="position:relative; bottom:5px">🍍</p>
+			</template>
+			<template #title><div class="home-logo">Twine</div></template>
+		</el-page-header>
+	</div>
 </template>
 
 
 
 <style scoped>
-.outter-container {
-	display: flex;
+.home-logo {
+	font-size: 30px;
+	display:inline-flex;
+	font-weight: 500;
 }
-.outter-container p {
-	font: bold;
-	padding-top: 1ex;
+.avatar-style {
+	top: 8px; 
+	position: relative;
 	padding-left: 1ex;
 	padding-right: 1ex;
 }
-.common-layout {
-	background-color: #1c1c1c;
-  color: #ffffff;
+.header-style {
+	backdrop-filter: blur(5px);
+	background-color: rgba(255, 255, 255, 0.2);
+	position: fixed;
+	top:0px;
+	left: 0px;
+
 }
+.header-layout {
+	width: 100vw; 
+	display:inline-flex;
+	padding: 1ex;
+}
+
+.common-layout {
+	height: 100vh;
+	width: 100vw;
+	background-color: #1c1c1c;
+	color: #ffffff;
+
+
+}
+.common-layout p {
+	color: #ffffff;
+	padding-left: 1ex;
+	padding-right: 1ex;
+}
+
 </style>
