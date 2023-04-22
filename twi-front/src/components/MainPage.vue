@@ -20,7 +20,8 @@ const newTweet = () => {
 
 <template>
   <div class="common-layout">
-    <el-page-header @back="toHome" class="header-style">
+    <div class="ui-floating-label">
+      <el-page-header @back="toHome" class="header-style">
       <template #content>
         <div class="header-layout" @click="toProfile">
           <el-avatar
@@ -37,15 +38,19 @@ const newTweet = () => {
       <template #title><div class="home-logo">Twine</div></template>
     </el-page-header>
 	<div  class="sidebar-wrapper">
-      <el-menu default-active="timeline" :collapse="true" class="sidebar-style" >
-        <el-menu-item index="timeline"> <Files color="#fff"/></el-menu-item>
+      <el-menu default-active="timeline" :collapse="true" class="sidebar-style" :router="true">
+        <el-menu-item index="timeline" > <Files color="#fff"/></el-menu-item>
 		<el-menu-item index="write"> <Plus color="#fff" /></el-menu-item>
 		<el-menu-item index="home"> <House color="#fff" /></el-menu-item>
       </el-menu>
     </div>
-    <div class="timeline-wrapper">
-      <TimelineList></TimelineList>
     </div>
+    <div class="content-under-floating">
+      <div class="timeline-wrapper">
+	  <router-view></router-view>
+    </div>
+    </div>
+    
 
   </div>
 </template>
@@ -53,6 +58,10 @@ const newTweet = () => {
 
 
 <style scoped>
+.content-under-floating {
+  position: relative;
+  z-index: 1;
+}
 .sidebar-wrapper {
 
   position: fixed;
@@ -94,13 +103,16 @@ const newTweet = () => {
   display: inline-flex;
   padding: 1ex;
 }
+.ui-floating-label {
+  position: relative;
+  z-index: 999;
+}
 
 .common-layout {
   height: 100vh;
   width: 100vw;
   background-color: #1c1c1c;
   color: #ffffff;
-  z-index: 3;
 }
 .common-layout p {
   color: #ffffff;
