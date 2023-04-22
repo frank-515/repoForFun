@@ -2,11 +2,12 @@
 import TimelineList from "./timelinePage/TimelineList.vue";
 import { useUserStore } from "../store/globalStore";
 import defaultAvatarUrl from "../assets/default_avatar.png";
-import {Files, Plus, House} from '@element-plus/icons-vue'
+import { Files, Plus, House, Search, Picture  } from "@element-plus/icons-vue";
 import NewTweet from "./NewTweet.vue";
 const userStore = useUserStore();
 const username = userStore.state.user.username;
 const avatarUrl = userStore.state.user.avatarUrl;
+
 const toHome = () => {
   alert("To Home");
 };
@@ -14,44 +15,49 @@ const toProfile = () => {
   alert("To Profile");
 };
 const newTweet = () => {
-	alert("New Tweet");
-}
+  alert("New Tweet");
+};
 </script>
 
 <template>
   <div class="common-layout">
     <div class="ui-floating-label">
       <el-page-header @back="toHome" class="header-style">
-      <template #content>
-        <div class="header-layout" @click="toProfile">
-          <el-avatar
-            class="avatar-style"
-            :src="avatarUrl ? avatarUrl : defaultAvatarUrl"
-          >
-          </el-avatar>
-          <p>{{ username }}</p>
-        </div>
-      </template>
-      <template #icon>
-        <p class="home-logo" style="position: relative; bottom: 5px">🍍</p>
-      </template>
-      <template #title><div class="home-logo">Twine</div></template>
-    </el-page-header>
-	<div  class="sidebar-wrapper">
-      <el-menu default-active="timeline" :collapse="true" class="sidebar-style" :router="true">
-        <el-menu-item index="timeline" > <Files color="#fff"/></el-menu-item>
-		<el-menu-item index="write"> <Plus color="#fff" /></el-menu-item>
-		<el-menu-item index="home"> <House color="#fff" /></el-menu-item>
-      </el-menu>
-    </div>
+        <template #content>
+          <div class="header-layout" @click="toProfile">
+            <el-avatar
+              class="avatar-style"
+              :src="avatarUrl ? avatarUrl : defaultAvatarUrl"
+            >
+            </el-avatar>
+            <p>{{ username }}</p>
+          </div>
+        </template>
+        <template #icon>
+          <p class="home-logo" style="position: relative; bottom: 5px">🍍</p>
+        </template>
+        <template #title><div class="home-logo">Twine</div></template>
+      </el-page-header>
+      <div class="sidebar-wrapper">
+        <el-menu
+          default-active="timeline"
+          :collapse="true"
+          class="sidebar-style"
+          :router="true"
+        >
+          <el-menu-item index="timeline"> <Files color="#fff" /></el-menu-item>
+          <el-menu-item index="write"> <Plus color="#fff" /></el-menu-item>
+          <el-menu-item index="home"> <House color="#fff" /></el-menu-item>
+          <el-menu-item index="search"> <Search color="#fff" /> </el-menu-item>
+          <el-menu-item index="picture"> <Picture color="#fff" /> </el-menu-item>
+        </el-menu>
+      </div>
     </div>
     <div class="content-under-floating">
       <div class="timeline-wrapper">
-	  <router-view></router-view>
+        <router-view></router-view>
+      </div>
     </div>
-    </div>
-    
-
   </div>
 </template>
 
@@ -63,13 +69,12 @@ const newTweet = () => {
   z-index: 1;
 }
 .sidebar-wrapper {
-
   position: fixed;
   left: 0px;
-  top: 10ex
+  top: 10ex;
 }
 .sidebar-style {
-	backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
   background-color: rgba(255, 255, 255, 0.2);
 }
 
