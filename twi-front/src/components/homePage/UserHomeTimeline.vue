@@ -67,12 +67,12 @@
   
   <style scoped>
   .tweet-wrapper {
-    width: auto;
     min-width: 300px;
-    padding: 5px;
-    border-radius: 5px;
-    text-align: left;
-    word-wrap: break-word;
+  width: 50vw;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: left;
+  word-wrap: break-word;
   }
   
   .tweets-list {

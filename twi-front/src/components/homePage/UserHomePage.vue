@@ -14,11 +14,19 @@ const exampleTweets = [
 <template>
   <div class="outer-container">
     <UserProfile></UserProfile>
-    <UserHomeTimeline></UserHomeTimeline>
+    <div class="profile-style">
+      <UserHomeTimeline></UserHomeTimeline>
+    </div>
+    
   </div>
 </template>
 
 <style scoped>
+.profile-style {
+  display: flex;
+  justify-content: center; /* 子元素水平居中 */
+  align-items: center; /* 子元素垂直居中 */
 
+}
 
 </style>

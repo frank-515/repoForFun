@@ -162,7 +162,7 @@ const props = defineProps({
 }
          
 .outer-wrapper {
-  max-width: 520px;
+  width: 50vw;
   min-width: 320px;
 }
 </style>
