@@ -4,7 +4,7 @@ export const useUserStore = defineStore('user', () => {
   const state = {
     user: {
       user_id: '',
-      username: '',
+      username: 'frank515',
       avatarUrl: '',
       bio: '',
       followers: 0,
