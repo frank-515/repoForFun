@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import defaultBannerURL from "@/assets/default_banner.jpg";
-import defaultAvatarURL from "@/assets/default_avatar.png";
+import defaultBannerURL from "@assets/assets/default_banner.jpg";
+import defaultAvatarURL from "@assets/assets/default_avatar.png";
 
 interface userProfileType {
   user_id: String;

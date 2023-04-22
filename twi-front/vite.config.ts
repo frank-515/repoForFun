@@ -6,26 +6,43 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
 import path from "path";
+import copy from 'rollup-plugin-copy'
 
 const pathSrc = path.resolve(__dirname, './src')
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    origin: 'http://localhost:3000'
+  },
   resolve: {
     alias: {
+      "@assets": path.join(__dirname, "./public"),
       "@": path.join(__dirname, "./src"),
+
     },
   },
   build: {
     assetsDir: 'src/assets',
+    manifest: true,
     rollupOptions: {
       output: {
         assetFileNames: 'assets/[name][extname]',
         intro: 'const __base = import.meta.env.BASE_URL'
       },
+      input: '/src/main.ts'
     },
+    assetsInlineLimit: 0
   },
   plugins: [
     vue(),
+    copy({
+      targets: [
+        {
+          src: 'src/assets/*', // 源文件夹路径
+          dest: 'dist/src/assets' // 目标文件夹路径
+        },
+      ]
+    }),
     AutoImport({
       // Auto import functions from Vue, e.g. ref, reactive, toRef...
       // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等

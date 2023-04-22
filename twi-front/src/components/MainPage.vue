@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TimelineList from "./timelinePage/TimelineList.vue";
 import { useUserStore } from "../store/globalStore";
-import defaultAvatarUrl from "../assets/default_avatar.png";
+import defaultAvatarUrl from "@assets/assets/default_avatar.png";
 import { Files, Plus, House, Search, Picture  } from "@element-plus/icons-vue";
 import NewTweet from "./NewTweet.vue";
 const userStore = useUserStore();

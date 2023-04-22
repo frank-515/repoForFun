@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import default_avatar_url from "../../assets/default_avatar.png";
+import default_avatar_url from "@assets/assets/default_avatar.png";
 import { defineProps } from 'vue';
-import exampleImg from "../../assets/default_banner.jpg";
+import exampleImg from "@assets/assets/default_banner.jpg";
 const default_avatar = document.createElement("img");
 
 const props = defineProps({
