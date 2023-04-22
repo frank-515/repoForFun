@@ -69,7 +69,7 @@ const fetchNewTweets = async(): Promise<Tweet[]> => {
 .tweet-wrapper {
   width: auto;
   min-width: 300px;
-  max-width: 400px;
+  width: 50vw;
   padding: 5px;
   border-radius: 5px;
   text-align: left;

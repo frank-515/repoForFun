@@ -17,6 +17,8 @@ import MainPage from './components/MainPage.vue';
 .wrapper {
   background-color: #1c1c1c;
   color: #ffffff;
+  width: 100vw;
+  height: 100vh;
 }
 
 </style>

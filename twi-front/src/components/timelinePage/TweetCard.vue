@@ -80,6 +80,7 @@ const onShare = () => {
   clip-path: polygon(5% 0, 95% 0, 95% 100%, 5% 100%);
   position: relative;
   top: 1ex;
+  margin: 1ex;
 }
 .user-input-container {
   display: flex;
