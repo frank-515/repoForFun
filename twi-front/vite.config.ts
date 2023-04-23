@@ -18,7 +18,6 @@ export default defineConfig({
     alias: {
       "@assets": path.join(__dirname, "./public"),
       "@": path.join(__dirname, "./src"),
-
     },
   },
   build: {
@@ -26,10 +25,13 @@ export default defineConfig({
     manifest: true,
     rollupOptions: {
       output: {
-        assetFileNames: 'assets/[name][extname]',
-        intro: 'const __base = import.meta.env.BASE_URL'
+        // assetFileNames: 'assets/[name][extname]',
+        // intro: 'const __base = import.meta.env.BASE_URL'
       },
-      input: '/src/main.ts'
+      input: {
+        entry: path.resolve(__dirname, 'src/login/index.html'),
+        main: path.resolve(__dirname, 'index.html')
+      }
     },
     assetsInlineLimit: 0
   },

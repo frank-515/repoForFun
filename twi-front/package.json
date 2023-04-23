@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build && mkdir ./dist/public && cp -r ./public/* ./dist/public && cp -r ./dist/* ../twi/public",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "bp": "vue-tsc && vite build && mkdir ./dist/public && cp -r ./public/* ./dist/public && cp -r ./dist/* ../twi/public && vite preview" 
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
