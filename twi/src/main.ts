@@ -48,23 +48,28 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-
-app.post('/api/register', upload.none(), (req: Req, res: Rsp) => {
+// POST `password` `username` `user_id`
+// RESPONSE 'success'
+app.post('/api/register', upload.none(), (req: Request, res: Response) => {
   pool.getConnection(async function(err: any, connection:any ){
     await connection.query(
       'INSERT INTO users (user_id, password, username) VALUES (?, ?, ?)',
       [req.body.user_id, sha256(req.body.password), req.body.username ? req.body.username : "Select your username"],
       function(err: any, result: any) {
         if (err) {
-          console.log(err.message);
+          // console.log(err.message);
+          res.send('failed: Duplicate');
+        } else {
+          connection.release();
+          res.send('success')
         }
       }
     );
-    connection.release();
-    res.send('success')
+    
    });
 })
-
+// POST user_id password,
+// REQUEST 'success' or 'failure'
 app.post('/api/login', upload.none(), (req: Req, res: Rsp) => {
   let password: string = 'null';
   pool.getConnection((err: any, connection: any) => {
