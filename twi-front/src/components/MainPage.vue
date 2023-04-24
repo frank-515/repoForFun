@@ -4,11 +4,22 @@ import { useUserStore } from "../store/globalStore";
 import defaultAvatarUrl from "@assets/assets/default_avatar.png";
 import { Files, Plus, House, Search, Picture  } from "@element-plus/icons-vue";
 import NewTweet from "./NewTweet.vue";
+import { ref } from "vue"
 const userStore = useUserStore();
-const username = userStore.state.user.username;
-const avatarUrl = userStore.state.user.avatarUrl;
+const username = ref('');
+const avatarUrl = ref('')
+
+const updateUserInfo = () => {
+  userStore.fetchInfo(() => {
+    username.value = userStore.state.user.username;
+    avatarUrl.value = userStore.state.user.avatarUrl;
+  });
+}
+updateUserInfo();
+
 
 const toHome = () => {
+  updateUserInfo();
   alert("To Home");
 };
 const toProfile = () => {
@@ -34,7 +45,7 @@ const newTweet = () => {
           </div>
         </template>
         <template #icon>
-          <p class="home-logo" style="position: relative; bottom: 5px">🍍</p>
+          <p class="home-logo" style="position: relative; bottom: 5px; transform: rotate(40deg);">🍍</p>
         </template>
         <template #title><div class="home-logo">Twine</div></template>
       </el-page-header>
@@ -88,7 +99,9 @@ const newTweet = () => {
 .home-logo {
   font-size: 30px;
   display: inline-flex;
-  font-weight: 500;
+  font-weight: 800;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  
 }
 .avatar-style {
   top: 8px;
