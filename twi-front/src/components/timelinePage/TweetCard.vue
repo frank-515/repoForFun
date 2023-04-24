@@ -9,6 +9,18 @@ const props = defineProps({
   username: String,
   avatarUrl: String,
   text: String,
+  replyCount: {
+    type: Number,
+    default: 0,
+  },
+  starCount: {
+    type: Number,
+    default: 0,
+  },
+  retweetCount: {
+    type: Number,
+    default: 0,
+  },
   imagesUrl: {
     type: Array,
     default: () => [],
@@ -60,11 +72,15 @@ const onShare = () => {
       <img class="image-wrapper" :src="url" fit="fit">
     </span>
     <el-row :gutter="20">
-      <el-col :span="14"></el-col>
-        <el-col :span="2"><el-icon><ChatLineSquare :onclick="onReply"/></el-icon></el-col>
-      <el-col :span="2"><el-icon><Star :onclick="onStar"/></el-icon></el-col>
-      <el-col :span="2"><el-icon><Refresh :onclick="onRetweet"/></el-icon></el-col>
+      <el-col :span="11"></el-col>
+        <el-col :span="1"><el-icon><ChatLineSquare :onclick="onReply"/></el-icon></el-col>
+        <el-col :span="2"><strong>{{ props.replyCount }}</strong></el-col>
+      <el-col :span="1"><el-icon><Star :onclick="onStar"/></el-icon></el-col>
+      <el-col :span="2"><strong>{{ props.starCount }}</strong></el-col>
+      <el-col :span="1"><el-icon><Refresh :onclick="onRetweet"/></el-icon></el-col>
+      <el-col :span="2"><strong>{{ props.retweetCount }}</strong></el-col>
       <el-col :span="2"><el-icon><Share :onclick="onShare"/></el-icon></el-col>
+      
       <el-col :span="2"></el-col>
     </el-row>
     <hr class="divider"/>
