@@ -38,7 +38,9 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { ElNotification } from 'element-plus'
+import axios, { AxiosResponse } from 'axios'
+import { useUserStore } from "../store/globalStore";
+const userStore = useUserStore()
 
 const props = defineProps({
   replyToTweet: {
@@ -55,7 +57,25 @@ const tweetText = ref("");
 const maxLength = 144; // 推文最大长度
 const picsUploadedUrl = ref("")
 const onSend = () => {
-  alert(tweetText.value + '发送啦')
+  const sendAPI = '/api/a/post';
+  console.log(tweetText.value);
+  
+  const postData = {
+    tweet_text: tweetText.value,
+    sender_id: userStore.state.user.user_id,
+    prev_tweet_id: null
+  }
+  //给后端传输数据
+  axios.post(sendAPI, postData)
+    .then((response) => {
+      if (response.status == 200) {
+        alert('成功发送')
+      }
+    })
+    .catch((error) => {
+      alert(error.message)
+    })
+
 }
 
 
@@ -97,8 +117,6 @@ const onSend = () => {
   color: gainsboro;
 }
 
-.text {
-}
 
 .text p {
   color: gainsboro;

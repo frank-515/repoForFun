@@ -13,7 +13,7 @@ const login = () => {
       user_id: id.value
     })
     .then(function (response) {
-      if (response.data == 'success') {        
+      if (response.data == 'success') {
         window.location.href = '/'
       } else {
         alert('登陆失败')

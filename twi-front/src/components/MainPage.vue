@@ -17,10 +17,9 @@ const updateUserInfo = () => {
 }
 updateUserInfo();
 
-
+// 目前用来刷新?
 const toHome = () => {
   updateUserInfo();
-  alert("To Home");
 };
 const toProfile = () => {
   alert("To Profile");
