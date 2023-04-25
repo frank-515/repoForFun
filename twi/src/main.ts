@@ -163,17 +163,17 @@ app.use('/', (req: Request, res: Response, next: any) => {
   next();
 });
 
-
+// POST 
+// REQUEST tweet_text, sender_id, prev_tweet_id, (if not tweets, set prev_tweet_id as null)
 app.post('/api/a/post', upload.none(), (req: Request, res: Response) => {
   let prev_tweet_id = req.body.prev_tweet_id ? req.body.prev_tweet_id : 0;
   let sql: string = 'INSERT INTO tweets(tweet_text, sender_id, prev_tweet_id) VALUES (?, ?, ?)'
-  console.log(req.body.post_text);
-  
+  console.log(req.body.tweet_text);
   let paras = [req.body.post_text, req.body.user_id, prev_tweet_id]
   const rows: Query = pool.query(sql, paras)
   rows.on('error', (err: MysqlError) => console.error(err.message))
   rows.on('result', (result: any) => {
-    res.send('done')
+    res.sendStatus(200)
   })
   //推文判断逻辑，分解@
 })
@@ -347,6 +347,10 @@ app.get('/api/images/:uuid', async (req: Request, res: Response) => {
   }, 200);
 })
 
+// GET /api/u/[user_id]
+// RESPONSE user_id, username, avatar_url, following_count, followers_count, join_date 
+// AS JSON
+
 app.get('/api/u/:user_id', function(req: Request, res: Response) {
   const userId = req.params.user_id;
 
@@ -466,7 +470,9 @@ app.get('/api/u/:user_id/tweets/:page', upload.none(), async (req: Request, res:
     res.status(200).json({ success: true, data });
   });
 });
-
+// GET timeline belongs to user
+// REQUEST user_id 
+// RESPONSE {[tweets], hasNextPage: boolean} AS JSON
 app.get('/api/a/get-time-line/:page', async(req: Request, res: Response) => {
   const page = parseInt(req.params.page) || 1;
   const tweetPerPage = 20;
@@ -479,7 +485,7 @@ app.get('/api/a/get-time-line/:page', async(req: Request, res: Response) => {
   FROM tweets t
   JOIN users u ON t.sender_id = u.user_id
   LEFT JOIN likes l ON t.tweet_id = l.tweet_id
-  WHERE t.sender_id IN (
+  WHERE t.sender_id = ? OR t.sender_id IN (
     SELECT followed_id
     FROM follows
     WHERE follower_id = ?
@@ -487,20 +493,20 @@ app.get('/api/a/get-time-line/:page', async(req: Request, res: Response) => {
   GROUP BY t.tweet_id
   ORDER BY tweet_time DESC
   LIMIT ?, ?
-  `, [req.body.user_id, offset, limit],
+  `, [req.body.user_id, req.body.user_id, offset, limit],
   function (err: any, results: any) {
     if (err) {
       console.error('Failed to get timeline', err);
       res.status(500).json({ message: 'Failed to get timeline' });
     }
     const tweets = results.slice(0, tweetPerPage).map((row: any) => ({
-      tweetId: row.tweet_id,
-      tweetText: row.tweet_text,
-      tweetTime: row.tweet_time,
-      senderId: row.sender_id,
-      senderUsername: row.username,
-      senderAvatarUrl: row.avatar_url,
-      likeCount: row.likes,
+      tweet_id: row.tweet_id,
+      text: row.tweet_text,
+      time: row.tweet_time,
+      user_id: row.sender_id,
+      username: row.username,
+      avatarUrl: row.avatar_url,
+      starCount: row.likes,
       retweetCount: row.retweet_count
     }));
     const hasNextPage = results.length > tweetPerPage;

@@ -58,13 +58,14 @@ const maxLength = 144; // 推文最大长度
 const picsUploadedUrl = ref("")
 const onSend = () => {
   const sendAPI = '/api/a/post';
-  console.log(tweetText.value);
+  
   
   const postData = {
-    tweet_text: tweetText.value,
-    sender_id: userStore.state.user.user_id,
-    prev_tweet_id: null
-  }
+        post_text: tweetText.value,
+        sender_id: userStore.state.user.user_id,
+        prev_tweet_id: null
+    }
+  console.log(postData.post_text);
   //给后端传输数据
   axios.post(sendAPI, postData)
     .then((response) => {
