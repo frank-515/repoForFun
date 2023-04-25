@@ -37,7 +37,7 @@ while ((match = regex.exec(text_resolved)) !== null) {
 }
 // 删除所有匹配的内容
 const text_resolved_filtered = text_resolved.replace(regex, "");
-console.log(urls); // ["http://example.com/image.jpg", "http://example.com/image2.jpg"]
+// console.log(urls); // ["http://example.com/image.jpg", "http://example.com/image2.jpg"]
 
 const onStar = () => {
   alert("onStar");
