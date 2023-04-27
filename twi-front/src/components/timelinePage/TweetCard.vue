@@ -72,7 +72,7 @@ const onShare = () => {
       <img class="image-wrapper" :src="url" fit="fit">
     </span>
     <el-row :gutter="20">
-      <el-col :span="11"></el-col>
+      <el-col :span="13"></el-col>
         <el-col :span="1"><el-icon><ChatLineSquare :onclick="onReply"/></el-icon></el-col>
         <el-col :span="2"><strong>{{ props.replyCount }}</strong></el-col>
       <el-col :span="1"><el-icon><Star :onclick="onStar"/></el-icon></el-col>
@@ -81,7 +81,6 @@ const onShare = () => {
       <el-col :span="2"><strong>{{ props.retweetCount }}</strong></el-col>
       <el-col :span="2"><el-icon><Share :onclick="onShare"/></el-icon></el-col>
       
-      <el-col :span="2"></el-col>
     </el-row>
     <hr class="divider"/>
   </div>
