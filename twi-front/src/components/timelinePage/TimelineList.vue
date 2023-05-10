@@ -11,8 +11,10 @@
           <li class="tweet-wrapper" v-for="item in getTweetVal()" :key="item.user_id">
             <TweetCard
               :user_id="item.user_id"
+              :tweet_id="item.tweet_id"
               :username="item.username"
               :text="item.text"
+              :time="item.time"
               :avatarUrl="item.avatarUrl"
               :starCount="item.starCount"
               :replyCount="item.replyCount"
@@ -31,6 +33,8 @@
 
     interface Tweet {
       user_id: string;
+      tweet_id: string;
+      time: Date;
       username: string;
       avatarUrl: string | undefined;
       text: string;

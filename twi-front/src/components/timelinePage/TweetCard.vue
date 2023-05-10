@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import default_avatar_url from "@assets/assets/default_avatar.png";
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 import exampleImg from "@assets/assets/default_banner.jpg";
+import axios, { Axios } from "axios";
+import { useUserStore } from "../../store/globalStore";
+const userStore = useUserStore();
+const userInfo = {
+  user_id: userStore.state.user.user_id,
+  username: userStore.state.user.username
+}
 const default_avatar = document.createElement("img");
 
 const props = defineProps({
+  tweet_id: String,
+  tweet_time: Date,
   user_id: String,
   username: String,
   avatarUrl: String,
@@ -27,6 +36,10 @@ const props = defineProps({
   },
 });
 
+const replyCountRef = ref(props.replyCount)
+const starCountRef = ref(props.starCount)
+const retweetCountRef = ref(props.retweetCount)
+
 let text_resolved: string = props.text ? props.text : ""
 const urls: string[] = [];
 const regex = /\[img=([^\]]+)\]/g;
@@ -39,11 +52,49 @@ while ((match = regex.exec(text_resolved)) !== null) {
 const text_resolved_filtered = text_resolved.replace(regex, "");
 // console.log(urls); // ["http://example.com/image.jpg", "http://example.com/image2.jpg"]
 
+const pinkColor = 'color: #FF9999'
+const greenColor = ' color: #009944'
+const defaultColor = 'color: #FFFFFF'
+
+let isStarted = ref(false);
+let isRetweeted = ref(false);
+
+const likeAPI = '/api/a/like'
+const retweetAPI = '/api/a/retweet'
+
+const postData = async (url: string, data: object) => {
+    try {
+      const response = await axios.post(url, data);
+      return response.data
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
 const onStar = () => {
-  alert("onStar");
+  isStarted.value = !isStarted.value
+  if (isStarted.value) {
+    starCountRef.value = starCountRef.value + 1
+  } else {
+    starCountRef.value = starCountRef.value - 1
+  }
+  postData(likeAPI, {
+    user_id: userInfo.user_id,
+    like_twitter_id: props.tweet_id
+  })
+  
 }
 const onRetweet = () => {
-  alert("onRetweet");
+  isRetweeted.value = !isRetweeted.value
+  if (isRetweeted.value) {
+    retweetCountRef.value = retweetCountRef.value + 1
+  } else {
+    retweetCountRef.value = retweetCountRef.value - 1
+  }
+  postData(retweetAPI, {
+    retweet_id: props.tweet_id,
+    user_id: userInfo.user_id
+  })
 }
 const onReply = () => {
  alert("onReply");
@@ -74,11 +125,11 @@ const onShare = () => {
     <el-row :gutter="20">
       <el-col :span="13"></el-col>
         <el-col :span="1"><el-icon><ChatLineSquare :onclick="onReply"/></el-icon></el-col>
-        <el-col :span="2"><strong>{{ props.replyCount }}</strong></el-col>
-      <el-col :span="1"><el-icon><Star :onclick="onStar"/></el-icon></el-col>
-      <el-col :span="2"><strong>{{ props.starCount }}</strong></el-col>
-      <el-col :span="1"><el-icon><Refresh :onclick="onRetweet"/></el-icon></el-col>
-      <el-col :span="2"><strong>{{ props.retweetCount }}</strong></el-col>
+        <el-col :span="2"><strong>{{ replyCountRef }}</strong></el-col>
+      <el-col :span="1"><el-icon><Star :onclick="onStar" :style="isStarted ? pinkColor : defaultColor"/></el-icon></el-col>
+      <el-col :span="2"><strong>{{ starCountRef }}</strong></el-col>
+      <el-col :span="1"><el-icon><Refresh :onclick="onRetweet" :style="isRetweeted ? greenColor : defaultColor" /></el-icon></el-col>
+      <el-col :span="2"><strong>{{ retweetCountRef }}</strong></el-col>
       <el-col :span="2"><el-icon><Share :onclick="onShare"/></el-icon></el-col>
       
     </el-row>
@@ -131,9 +182,8 @@ const onShare = () => {
   object-fit: contain;
 }
 
-.icon-pressed {
-  text-shadow: rgba(255,162,0,0.9) 0px 0px 7px;
-}
+
+
 </style>
 
 <!-- 对代码进行了如下修正：
@@ -144,3 +194,4 @@ const onShare = () => {
 4. 将 text_resolved 更改为 text_resolved_filtered 以更准确地描述含义。
 5. 将 :v-for 改为 v-for。
 6. 将 fit 属性的指定方式更改为 props.fit，以从 props 中获取。 -->
+

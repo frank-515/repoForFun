@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { request } from "http";
 import { connect } from "http2";
 import { Connection, MysqlError, Pool, PoolConnection, Query, queryCallback } from "mysql";
@@ -189,6 +189,7 @@ app.post('/api/a/set-bio', upload.none(), (req: Request, res: Response) => {
 })
 
 // like_twitter_id
+// POST user_id like_twitter_id
 app.post('/api/a/like', upload.none(), async (req: Request, res: Response) => {
   const queryLikeSQL = 'SELECT * FROM likes WHERE user_id = ? AND tweet_id = ?'
   const insertLikeSQL = 'INSERT INTO likes(user_id, tweet_id) VALUES (?, ?)'
@@ -234,7 +235,7 @@ app.post('/api/a/like', upload.none(), async (req: Request, res: Response) => {
     }
   }, 100);
 })
-// followed_id
+// followed_id user_id
 app.post('/api/a/follow', upload.none(), async (req: Request, res: Response) => {
   const followerId = req.body.user_id;
   const followedId = req.body.followed_id;
@@ -403,7 +404,7 @@ app.post('/api/a/set-avatar', upload.none(), async (req: Request, res: Response)
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
-// retweet_id
+// retweet_id user_id
 app.post('/api/a/retweet',upload.none(), async (req: Request, res: Response) => {
   const retweetId = req.body.retweet_id;
   const senderId = req.body.user_id;
@@ -515,7 +516,95 @@ app.get('/api/a/get-time-line/:page', async(req: Request, res: Response) => {
 });
 
 
+/**
+ * 根据tweet_id查询相关信息
+ * @param {string} tweet_id 推文ID
+ * @param {string} user_id 用户ID
+ * @param {Function} callback 回调函数
+ */
+function getTweetInfo(tweet_id: string, user_id: string, callback: (err: Error | null, tweetInfo?: any) => void): void {
+  // 从连接池中获取一个连接
+  pool.getConnection(function(err: any, connection: PoolConnection) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    // 查询推文信息和用户是否点赞
+    const tweetSql: string = 'SELECT t.*, ' +
+      '(CASE WHEN (l.user_id = ? AND l.tweet_id = t.tweet_id) THEN 1 ELSE 0 END) AS is_liked ' +
+      'FROM tweets AS t ' +
+      'LEFT JOIN likes AS l ON l.tweet_id = t.tweet_id ' +
+      'AND l.user_id = ? ' +
+      'WHERE t.tweet_id = ?';
+    connection.query(tweetSql, [user_id, user_id, tweet_id], function(err: any, tweetResult: any[]) {
+      if (err) {
+        connection.release();
+        callback(err);
+        return;
+      }
+
+      // 查询推文发送者的用户名
+      const senderSql: string = 'SELECT username FROM users WHERE user_id = ?';
+      connection.query(senderSql, tweetResult[0].sender_id, function(err: any, senderResult: any[]) {
+        connection.release();
+        if (err) {
+          callback(err);
+          return;
+        }
+
+        // 将查询结果拼装成JSON格式
+        const tweetInfo = {
+          tweet_id: tweetResult[0].tweet_id,
+          tweet_text: tweetResult[0].tweet_text,
+          tweet_time: tweetResult[0].tweet_time,
+          sender_id: tweetResult[0].sender_id,
+          sender_name: senderResult[0].username,
+          prev_tweet_id: tweetResult[0].prev_tweet_id,
+          like_count: tweetResult[0].like_count,
+          retweet_count: tweetResult[0].retweet_count,
+          is_liked: tweetResult[0].is_liked === 1 ? true : false
+        }
+        callback(null, tweetInfo);
+      });
+    });
+  });
+}
+
+// 接口实现
+app.post('/api/a/tweet/:tweet_id', (req: Request, res: Response, next: NextFunction) => {
+  const tweet_id: string = req.params.tweet_id;
+  const user_id: string = req.body.user_id;
+
+  // 调用getTweetInfo函数查询推文信息
+  getTweetInfo(tweet_id, user_id, (err: Error | null, tweetInfo?: any) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(tweetInfo);
+  });
+});
+
+// 接口实现
+app.get('/api/a/tweet/:tweet_id', (req: Request, res: Response, next: NextFunction) => {
+  const tweet_id: string = req.params.tweet_id;
+  const user_id: string = req.body.user_id;
+
+  // 调用getTweetInfo函数查询推文信息
+  getTweetInfo(tweet_id, user_id, (err: Error | null, tweetInfo?: any) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(tweetInfo);
+  });
+});
+
+const portListening = 3000
+const ip_address = 'localhost'
 // 启动服务器并开始监听端口
-app.listen(3000, () => {
+app.listen(portListening, () => {
   console.log('服务器已启动')
+  console.log('Server are running at http://' + ip_address + ':' + portListening);
 })
