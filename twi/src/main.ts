@@ -184,7 +184,17 @@ app.post('/api/a/set-bio', upload.none(), (req: Request, res: Response) => {
   const rows = pool.query(sql, params)
   rows.on('error', (err: MysqlError) => console.error(err.message))
   rows.on('result', (result: any) => {
-    res.send('done')
+    res.status(200)
+  })
+})
+
+app.post('/api/a/set-username', upload.none(), (req: Request, res: Response) => {
+  const sql = 'UPDATE users SET username = ? WHERE user_id = ?'
+  const params = [req.body.username, req.body.user_id] 
+  const rows = pool.query(sql, params)
+  rows.on('error', (err: MysqlError) => console.error(err.message))
+  rows.on('result', (result: any) => {
+    res.status(200)
   })
 })
 
@@ -319,7 +329,7 @@ app.get('/api/images/:uuid', async (req: Request, res: Response) => {
   let founded = false;
   /* 使用连接池从数据库查找项目 */
   const result = await pool.query('SELECT uuid FROM images WHERE uuid LIKE ?',
-   [uuid + '.%'])
+   [uuid + '%'])
   result.on('error', (err: any) => {    
     console.error(err);
     res.status(500).send('Error querying database');
@@ -381,7 +391,8 @@ app.get('/api/u/:user_id', function(req: Request, res: Response) {
           avatar_url: user.avatar_url,
           following_count: user.following_count,
           followers_count: user.followers_count,
-          join_date: user.join_date
+          join_date: user.join_date,
+          // banner: user.banner
         };
 
         res.json(userResponse);
@@ -398,6 +409,19 @@ app.post('/api/a/set-avatar', upload.none(), async (req: Request, res: Response)
 
   try {
     const result = await pool.query('UPDATE users SET avatar_url = ? WHERE user_id = ?', [image_name, user_id]);
+    res.status(200).json({ success: true });
+  } catch (error: any) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+// image_name
+app.post('/api/a/set-banner', upload.none(), async (req: Request, res: Response) => {
+  const image_name = req.body.image_name;;
+  const user_id = req.body.user_id;
+
+  try {
+    const result = await pool.query('UPDATE users SET banner = ? WHERE user_id = ?', [image_name, user_id]);
     res.status(200).json({ success: true });
   } catch (error: any) {
     console.error(error.message);
@@ -540,36 +564,56 @@ function getTweetInfo(tweet_id: string, user_id: string, callback: (err: Error |
     connection.query(tweetSql, [user_id, user_id, tweet_id], function(err: any, tweetResult: any[]) {
       if (err) {
         connection.release();
-        callback(err);
+        console.error(err.message);
+        // 根据异常情况返回不同的 JSON 响应
+        if (err.sqlMessage.includes('error message')) {
+          callback(null, { state: '404' });
+        } else {
+          callback(err);
+        }
         return;
       }
 
       // 查询推文发送者的用户名
       const senderSql: string = 'SELECT username FROM users WHERE user_id = ?';
-      connection.query(senderSql, tweetResult[0].sender_id, function(err: any, senderResult: any[]) {
-        connection.release();
-        if (err) {
-          callback(err);
-          return;
-        }
+      if (tweetResult[0]) {
+        connection.query(senderSql, tweetResult[0].sender_id, function(err: any, senderResult: any[]) {
+          connection.release();
+          if (err) {
+            console.error(err.message);
+            callback(
+              null,
+              { state: '404' }
+            ); // 根据异常情况返回不同的 JSON 响应
+            return;
+          }
+  
+          // 将查询结果拼装成JSON格式
+          const tweetInfo = {
+            state: '200',
+            tweet_id: tweetResult[0].tweet_id,
+            tweet_text: tweetResult[0].tweet_text,
+            tweet_time: tweetResult[0].tweet_time,
+            sender_id: tweetResult[0].sender_id,
+            sender_name: senderResult[0].username,
+            prev_tweet_id: tweetResult[0].prev_tweet_id,
+            like_count: tweetResult[0].like_count,
+            retweet_count: tweetResult[0].retweet_count,
+            is_liked: tweetResult[0].is_liked === 1 ? true : false
+          }
+          callback(null, tweetInfo);
+        });
+      } else {
+        callback(
+          null,
+          { state: '404' }
+        );
+      }
 
-        // 将查询结果拼装成JSON格式
-        const tweetInfo = {
-          tweet_id: tweetResult[0].tweet_id,
-          tweet_text: tweetResult[0].tweet_text,
-          tweet_time: tweetResult[0].tweet_time,
-          sender_id: tweetResult[0].sender_id,
-          sender_name: senderResult[0].username,
-          prev_tweet_id: tweetResult[0].prev_tweet_id,
-          like_count: tweetResult[0].like_count,
-          retweet_count: tweetResult[0].retweet_count,
-          is_liked: tweetResult[0].is_liked === 1 ? true : false
-        }
-        callback(null, tweetInfo);
-      });
     });
   });
 }
+
 
 // 接口实现
 app.post('/api/a/tweet/:tweet_id', (req: Request, res: Response, next: NextFunction) => {
