@@ -2,7 +2,7 @@
 import default_avatar_url from "@assets/assets/default_avatar.png";
 import { defineProps, ref } from 'vue';
 import exampleImg from "@assets/assets/default_banner.jpg";
-import axios, { Axios } from "axios";
+import axios, { Axios, AxiosError, AxiosResponse } from "axios";
 import { useUserStore } from "../../store/globalStore";
 const userStore = useUserStore();
 const userInfo = {
@@ -40,6 +40,26 @@ const replyCountRef = ref(props.replyCount)
 const starCountRef = ref(props.starCount)
 const retweetCountRef = ref(props.retweetCount)
 
+let isStarted = ref(false);
+let isRetweeted = ref(false)
+
+const fetchTweetWithUser = (): any => {
+  const api = '/api/a/tweet/'
+  axios.get(api + props.tweet_id)
+    .then((response: AxiosResponse) => {
+      // console.log(String(response.data.is_liked).includes('true'));
+      
+      isStarted.value = String(response.data.is_liked).includes('true')
+    })
+    .catch((error: AxiosError) => {
+      console.error(error.message);
+    })
+  // set isStarted.value to a default value
+  isStarted.value = false
+}
+fetchTweetWithUser()
+
+// 图片处理部分
 let text_resolved: string = props.text ? props.text : ""
 const urls: string[] = [];
 const regex = /\[img=([^\]]+)\]/g;
@@ -56,8 +76,7 @@ const pinkColor = 'color: #FF9999'
 const greenColor = ' color: #009944'
 const defaultColor = 'color: #FFFFFF'
 
-let isStarted = ref(false);
-let isRetweeted = ref(false);
+
 
 const likeAPI = '/api/a/like'
 const retweetAPI = '/api/a/retweet'

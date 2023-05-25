@@ -14,7 +14,7 @@ const onSearch = () => {
 
 </script>
 
-<style>
+<style scoped>
 .search-wrapper {
   display: flex;
   align-items: center;

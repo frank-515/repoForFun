@@ -2,7 +2,7 @@
 import TimelineList from "./timelinePage/TimelineList.vue";
 import { useUserStore } from "../store/globalStore";
 import defaultAvatarUrl from "@assets/assets/default_avatar.png";
-import { Files, Plus, House, Search, Picture  } from "@element-plus/icons-vue";
+import { Files, Plus, House, Search, Picture,Memo  } from "@element-plus/icons-vue";
 import NewTweet from "./NewTweet.vue";
 import { ref } from "vue"
 const userStore = useUserStore();
@@ -60,6 +60,7 @@ const newTweet = () => {
           <el-menu-item index="home"> <House color="#fff" /></el-menu-item>
           <el-menu-item index="search"> <Search color="#fff" /> </el-menu-item>
           <el-menu-item index="picture"> <Picture color="#fff" /> </el-menu-item>
+          <el-menu-item index="edit"> <Memo color="#fff" /> </el-menu-item>
         </el-menu>
       </div>
     </div>
