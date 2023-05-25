@@ -3,6 +3,7 @@ CREATE TABLE users (
   username VARCHAR(50) NOT NULL,
   bio VARCHAR(255) DEFAULT '',
   avatar_url VARCHAR(255),
+  banner VARCHAR(255) DEFAULT '',
   following_count INT DEFAULT 0,
   followers_count INT DEFAULT 0,
   retweet_from_count INT DEFAULT 0,
