@@ -3,12 +3,14 @@ import TimelineList from "./components/timelinePage/TimelineList.vue";
 import UserHomePage from "./components/homePage/UserHomePage.vue";
 import NewTweet from "./components/NewTweet.vue";
 import SearchBar from "./components/searchPage/SearchBar.vue"
+import userInfoFormPageVue from './components/editUserInfoComponent/userInfoFormPage.vue';
 const routes = [
     {path: '/', component: TimelineList},
     {path: '/timeline', component: TimelineList},
     {path: '/home', component: UserHomePage},
     {path: '/write', component: NewTweet},
-    {path: '/search', component: SearchBar}
+    {path: '/search', component: SearchBar},
+    {path: '/edit', component: userInfoFormPageVue}
 ]
 
 const router = createRouter({
