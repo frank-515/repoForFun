@@ -169,6 +169,8 @@ const onShare = () => {
 }
 .user-input-container {
   display: flex;
+  position: relative;
+  bottom: 1.6ex;
 }
 
 .avatar-container, .user-input-container {

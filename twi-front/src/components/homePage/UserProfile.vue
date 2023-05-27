@@ -1,6 +1,33 @@
 <script setup lang="ts">
 import defaultBannerURL from "@assets/assets/default_banner.jpg";
 import defaultAvatarURL from "@assets/assets/default_avatar.png";
+import { useUserStore } from "../../store/globalStore";
+import { reactive } from "vue";
+import { getCookieValueByName, fetchUserInfo } from '../../util'
+const userStore = useUserStore()
+
+
+
+const form = reactive({
+  user_id: '',
+  username: '',
+  avatarUrl: '',
+  bio: '',
+  bannerURL: '',
+  following: 0,
+  followers: 0,
+	tweets: 0,
+	likes: 0,
+  join_date: '',
+  location: '',
+  personal_url: '',
+  birth_date: '',
+
+})
+
+
+
+
 
 interface userProfileType {
   user_id: String;
@@ -19,14 +46,42 @@ const props = defineProps({
       user_id: "",
       username: "",
       avatarUrl: defaultAvatarURL,
-      bio: "",
+      bio: "", 
       banner: defaultBannerURL,
       following: 0,
       followers: 0,
     }),
   },
 });
+
+const refreshUserInfo = () => {
+  fetchUserInfo(user_id, (info) => {
+    form.username = userStore.state.user.username;
+    form.bannerURL = userStore.state.user.banner;
+    form.bio = userStore.state.user.bio;
+    form.followers = userStore.state.user.followers
+    form.following = userStore.state.user.following
+    form.user_id = userStore.state.user.user_id
+    form.join_date = userStore.state.user.join_date
+    form.avatarUrl = userStore.state.user.avatarUrl
+    form.location = userStore.state.user.location
+    form.personal_url = userStore.state.user.personal_url
+    form.birth_date = userStore.state.user.birth_date
+  })
+}
+let user_id = ''
+if (props.userProfile.user_id) {
+    // What to do?
+    user_id = props.userProfile.user_id + ''
+  } else {
+    user_id =  getCookieValueByName('user_id')!;
+  }
+refreshUserInfo();
+
+
 </script>
+
+
 
 <template>
   <div class="outer-wrapper">
@@ -35,7 +90,7 @@ const props = defineProps({
       style="width: 100%; height: 180px;"
       fit="cover"
       :src="
-        props.userProfile.banner ? props.userProfile.banner.toString() : defaultBannerURL
+        form.bannerURL ? form.bannerURL.toString() : defaultBannerURL
       "
     />
     <div class="user-card">
@@ -44,13 +99,13 @@ const props = defineProps({
           <el-avatar
             class="avatar"
             :size="60"
-            :src="props.userProfile.avatarUrl ? props.userProfile.avatarUrl.toString() : defaultAvatarURL"
+            :src="form.avatarUrl ? form.avatarUrl.toString() : defaultAvatarURL"
           ></el-avatar>
         </el-col>
         <el-col :span="18" class="username-id">
-          <span class="username">{{ props.userProfile.username }}</span>
+          <span class="username">{{ form.username }}</span>
           <el-text type="primary" style="padding: 1ex"
-            >@{{ props.userProfile.user_id }}
+            >@{{ form.user_id }}
           </el-text>
           <el-space></el-space>
         </el-col>
@@ -60,7 +115,7 @@ const props = defineProps({
         </el-col>
         <el-col :span="24">
           <span >
-            <p class="bio-wrapper">{{ props.userProfile.bio }}</p>
+            <p class="bio-wrapper">{{ form.bio }}</p>
           </span>
         </el-col>
       </el-row>
@@ -68,14 +123,14 @@ const props = defineProps({
         <el-col :span="8">
           <div>
             <p class="user-statistics">
-              <strong>{{ props.userProfile.following }}</strong><span /> following
+              <strong>{{ form.following }}</strong><span /> following
             </p>
           </div>
         </el-col>
         <el-col :span="8">
           <div>
             <p class="user-statistics">
-              <strong>{{ props.userProfile.following }}</strong><span /> following
+              <strong>{{ form.following }}</strong><span /> following
             </p>
           </div>
         </el-col>

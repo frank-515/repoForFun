@@ -10,7 +10,8 @@ const routes = [
     {path: '/home', component: UserHomePage},
     {path: '/write', component: NewTweet},
     {path: '/search', component: SearchBar},
-    {path: '/edit', component: userInfoFormPageVue}
+    {path: '/edit', component: userInfoFormPageVue},
+    {path: '/user/:user_id', component: UserHomePage, props: true}
 ]
 
 const router = createRouter({

@@ -1,10 +1,12 @@
     <template>
       <div>
+        <el-empty v-if="!getTweetVal()[0]" :image-size="200" description="Nothing there! Try to follow someone!"/>
         <ul
           class="tweets-list"
           v-infinite-scroll="onLoad"
           infinite-scroll-delay="1000"
           infinite-scroll-distance="300"
+          infinite-scroll-immediate="true"
           :v-if="tweets.length > 0"
         >
         
@@ -20,6 +22,7 @@
               :replyCount="item.replyCount"
               :retweetCount="item.retweetCount"
             />
+            
           </li>
           
         </ul>
@@ -28,7 +31,7 @@
 
     <script setup lang="ts">
     import TweetCard from "./TweetCard.vue";
-    import { defineProps, ref } from "vue";
+    import { createRenderer, defineProps, ref } from "vue";
     import axios from "axios"
 
     interface Tweet {
@@ -65,6 +68,7 @@
       }
     };
     
+    onLoad()
 
     const fetchNewTweets = async (): Promise<Tweet[]> => {
       // 发起异步请求获取新的 tweets 数据

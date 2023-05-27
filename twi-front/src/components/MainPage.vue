@@ -13,19 +13,27 @@ const updateUserInfo = () => {
   userStore.fetchInfo(() => {
     username.value = userStore.state.user.username;
     avatarUrl.value = userStore.state.user.avatarUrl;
+    
   });
 }
 updateUserInfo();
+// If not logged, Jump to login page
+
+setTimeout(() => {
+  if (username.value === '') {
+    window.location.href = '/src/login'
+  }
+}, 120);
 
 // 目前用来刷新?
 const toHome = () => {
   updateUserInfo();
 };
 const toProfile = () => {
-  alert("To Profile");
+  window.location.href = '/#/edit'
 };
 const newTweet = () => {
-  alert("New Tweet");
+  window.location.href = '/#/write'
 };
 </script>
 

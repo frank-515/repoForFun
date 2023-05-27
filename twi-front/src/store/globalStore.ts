@@ -24,7 +24,10 @@ export const useUserStore = defineStore('user', () => {
       followers: 0,
       following: 0,
       banner: '',
-      join_date: ''
+      join_date: '',
+      location: '',
+      personal_url: '',
+      birth_date: '',
     }
   }
   const setLoggedState = (logState: boolean) => {
@@ -50,6 +53,18 @@ export const useUserStore = defineStore('user', () => {
     state.user.banner = bannerURL
   }
 
+  const setPersonalUrl = (personalUrl: string) => {
+    state.user.personal_url = personalUrl
+  }
+
+  const setLocation = (location: string) => {
+    state.user.location = location
+  }
+
+  const setBirthDate = (birthDate: string) => {
+   state.user.birth_date = birthDate
+  }
+
   const fetchInfo = (cb: () => void) => {
     const apiAddress = '/api/u/' + getCookieValueByName('user_id');
     axios
@@ -63,8 +78,11 @@ export const useUserStore = defineStore('user', () => {
         setUserId(userData.user_id);
         state.user.followers = userData.followers_count;
         state.user.following = userData.following_count;
-        // state.user.banner = userData.banner;
+        state.user.banner = userData.banner;
         state.user.join_date = userData.join_date;
+        state.user.personal_url = userData.personal_url;
+        state.user.location = userData.location;
+        state.user.birth_date = userData.birth;
         cb();
       })
       .catch((error) => {
@@ -84,6 +102,9 @@ export const useUserStore = defineStore('user', () => {
     setAvatarUrl,
     setBio,
     setBanner,
+    setBirthDate,
+    setLocation,
+    setPersonalUrl,
     fetchInfo
   }
 })

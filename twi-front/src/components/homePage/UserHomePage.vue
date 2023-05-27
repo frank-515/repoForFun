@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import UserProfile from "./UserProfile.vue";
 import UserHomeTimeline from "./UserHomeTimeline.vue";
+import { useRoute } from "vue-router";
+import { useUserStore } from "../../store/globalStore";
 
-const exampleTweets = [
-	{user_id: "user", username: "user", text: "text here", avatarUrl: undefined, imagesUrl: undefined},
-	{user_id: "user", username: "user", text: "text here", avatarUrl: undefined, imagesUrl: undefined},
-	{user_id: "user", username: "user", text: "text here", avatarUrl: undefined, imagesUrl: undefined},
-	{user_id: "user", username: "user", text: "text here", avatarUrl: undefined, imagesUrl: undefined}
-]
+const route = useRoute()
+
+const user_id = String(route.params.user_id)
+
 
 </script>
 
 <template>
   <div class="outer-container">
-    <UserProfile></UserProfile>
+    <UserProfile :user_id="user_id"></UserProfile>
     <div class="profile-style">
-      <UserHomeTimeline></UserHomeTimeline>
+      <UserHomeTimeline :user_id="user_id"></UserHomeTimeline>
     </div>
     
   </div>

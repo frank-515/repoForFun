@@ -6,12 +6,29 @@
       <el-input v-model="form.user_id" :disabled="true">
       </el-input>
     </el-form-item>
+    <el-form-item label="Join Date">
+      <el-input v-model="form.join_date" :disabled="true">
+      </el-input>
+    </el-form-item>
     <el-form-item label="Username">
       <el-input v-model="form.username">
       </el-input>
     </el-form-item>
-    <el-form-item label="Bio">
-      <el-input v-model="form.bio" type="textarea" />
+    <el-form-item label="Location">
+      <el-input v-model="form.location">
+      </el-input>
+    </el-form-item>
+    <el-form-item label="Birth">
+      <el-date-picker
+      v-model="form.birth_date"
+      type="date"
+      label="Pick a date"
+      placeholder="Pick a date"
+      style="width: 100%"
+    />
+    </el-form-item>
+    <el-form-item label="URL">
+      <el-input v-model="form.personal_url" type="textarea" />
     </el-form-item>
     <el-form-item label="Avatar">
       <el-upload 
@@ -61,6 +78,9 @@ const setAvatarAPI = '/api/a/set-avatar' // image_name
 const setBannerAPI = '/api/a/set-banner' // image_name
 const setBioAPI = '/api/a/set-bio' // bio
 const setUsernameAPI = '/api/a/set-username' // username
+const setLocationAPI = '/api/a/set-location' // location
+const setBirthAPI = '/api/a/set-birth' // birth
+const setPersonalURLAPI = '/api/a/set-personal-url' // personal_url
 
 
 const userStore = useUserStore();
@@ -76,7 +96,11 @@ const form = reactive({
   followers: 0,
 	tweets: 0,
 	likes: 0,
-  join_date: ''
+  join_date: '',
+  location: '',
+  personal_url: '',
+  birth_date: '',
+
 })
 
 
@@ -109,6 +133,9 @@ const refreshUserInfo = () => {
     form.user_id = userStore.state.user.user_id
     form.join_date = userStore.state.user.join_date
     form.avatarUrl = userStore.state.user.avatarUrl
+    form.location = userStore.state.user.location
+    form.personal_url = userStore.state.user.personal_url
+    form.birth_date = userStore.state.user.birth_date
   });
 }
 
@@ -117,11 +144,11 @@ refreshUserInfo()
 const onSubmit = () => {
   axios.post(setUsernameAPI, {username: form.username})
   axios.post(setBioAPI, {bio: form.bio})
-  // axios.post(setBannerAPI, {image_name: form.bannerURL})
-  //   .catch((error) => {
-  //     console.log(error);
-  // })
+  axios.post(setBannerAPI, {image_name: form.bannerURL})
   axios.post(setAvatarAPI, {image_name: form.avatarUrl})
+  axios.post(setLocationAPI, {location: form.location})
+  axios.post(setBirthAPI, {birth: form.birth_date})
+  axios.post(setPersonalURLAPI, {personal_url: form.personal_url})
   setTimeout(() => {
     location.reload()
   }, 100);
