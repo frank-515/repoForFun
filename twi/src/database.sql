@@ -1,9 +1,13 @@
+-- Active: 1685019170670@@127.0.0.1@3306@twi
 CREATE TABLE users (
   user_id VARCHAR(16) PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
   bio VARCHAR(255) DEFAULT '',
   avatar_url VARCHAR(255),
   banner VARCHAR(255) DEFAULT '',
+  location VARCHAR(255) DEFAULT '',
+  birth_date DATE,
+  personal_url VARCHAR(255) DEFAULT '',
   following_count INT DEFAULT 0,
   followers_count INT DEFAULT 0,
   retweet_from_count INT DEFAULT 0,
@@ -23,7 +27,7 @@ CREATE TABLE tweets (
   retweet_count INT DEFAULT 0,
   INDEX (tweet_id),
   FOREIGN KEY (sender_id) REFERENCES users(user_id)
-)
+);
 
 
 CREATE TABLE likes (

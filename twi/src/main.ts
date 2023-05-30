@@ -187,10 +187,43 @@ app.post('/api/a/set-bio', upload.none(), (req: Request, res: Response) => {
     res.status(200)
   })
 })
-
+// username
 app.post('/api/a/set-username', upload.none(), (req: Request, res: Response) => {
   const sql = 'UPDATE users SET username = ? WHERE user_id = ?'
   const params = [req.body.username, req.body.user_id] 
+  const rows = pool.query(sql, params)
+  rows.on('error', (err: MysqlError) => console.error(err.message))
+  rows.on('result', (result: any) => {
+    res.status(200)
+  })
+})
+// location
+app.post('/api/a/set-location', upload.none(), (req: Request, res: Response) => {
+  const sql = 'UPDATE users SET location = ? WHERE user_id = ?'
+  const params = [req.body.location, req.body.user_id] 
+  const rows = pool.query(sql, params)
+  rows.on('error', (err: MysqlError) => console.error(err.message))
+  rows.on('result', (result: any) => {
+    res.status(200)
+  })
+})
+
+// birth
+app.post('/api/a/set-birth', upload.none(), (req: Request, res: Response) => {
+  const sql = 'UPDATE users SET birth_date = ? WHERE user_id = ?'
+  const params = [req.body.birth, req.body.user_id] 
+  const rows = pool.query(sql, params)
+  rows.on('error', (err: MysqlError) => console.error(err.message))
+  rows.on('result', (result: any) => {
+    res.status(200)
+  })
+})
+
+
+// personal_url
+app.post('/api/a/set-personal-url', upload.none(), (req: Request, res: Response) => {
+  const sql = 'UPDATE users SET personal_url = ? WHERE user_id = ?'
+  const params = [req.body.personal_url, req.body.user_id] 
   const rows = pool.query(sql, params)
   rows.on('error', (err: MysqlError) => console.error(err.message))
   rows.on('result', (result: any) => {
@@ -392,7 +425,10 @@ app.get('/api/u/:user_id', function(req: Request, res: Response) {
           following_count: user.following_count,
           followers_count: user.followers_count,
           join_date: user.join_date,
-          // banner: user.banner
+          banner: user.banner,
+          birth: user.birth,
+          personal_url: user.personal_url,
+          location: user.location
         };
 
         res.json(userResponse);
@@ -471,6 +507,7 @@ app.post('/api/a/retweet',upload.none(), async (req: Request, res: Response) => 
 app.get('/api/u/:user_id/tweets/:page', upload.none(), async (req: Request, res: Response) => {
   const { user_id, page } = req.params;
   const pageNumber = parseInt(page, 10);
+  const tweetPerPage = 10;
   const limit = 10;
   const offset = (pageNumber - 1) * limit;
   let tweets;
@@ -481,18 +518,24 @@ app.get('/api/u/:user_id/tweets/:page', upload.none(), async (req: Request, res:
     WHERE t.sender_id = ?
     ORDER BY t.tweet_time DESC
     LIMIT ?, ?
-  `, [user_id, offset, limit], (err: any, result: any) => {
+  `, [user_id, offset, limit], (err: any, results: any) => {
     if (err) {
       console.error(err.message);
       res.status(500).json({ success: false, message: 'Internal server error' });
       return
     }
-    tweets = result
-    console.log(tweets);
-  
-    const data = JSON.parse(JSON.stringify(tweets));
-  
-    res.status(200).json({ success: true, data });
+    const tweets = results.slice(0, tweetPerPage).map((row: any) => ({
+      tweet_id: row.tweet_id,
+      text: row.tweet_text,
+      time: row.tweet_time,
+      user_id: row.sender_id,
+      username: row.username,
+      avatarUrl: row.avatar_url,
+      starCount: row.likes,
+      retweetCount: row.retweet_count
+    }));
+    const hasNextPage = results.length > tweetPerPage;
+    res.json({ tweets, hasNextPage });
   });
 });
 // GET timeline belongs to user
@@ -500,7 +543,7 @@ app.get('/api/u/:user_id/tweets/:page', upload.none(), async (req: Request, res:
 // RESPONSE {[tweets], hasNextPage: boolean} AS JSON
 app.get('/api/a/get-time-line/:page', async(req: Request, res: Response) => {
   const page = parseInt(req.params.page) || 1;
-  const tweetPerPage = 20;
+  const tweetPerPage = 10;
   const offset = (page - 1) * tweetPerPage;
   const limit = tweetPerPage + 1;
 
