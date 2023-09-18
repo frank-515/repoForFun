@@ -1,0 +1,13 @@
+{
+    "salt": "frank515",
+    "port": "8080",
+    "databaseConfig": {
+        "host": "localhost",
+        "user": "frank515",
+        "database": "store",
+        "password": "frank515",
+        "connectionLimit": 10,
+        "waitForConnections": true
+    },
+    "imageHostPath": "./images_host"
+}
