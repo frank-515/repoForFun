@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build && mkdir ./dist/public && cp -r ./public/* ./dist/public && cp -r ./dist/* ../twi/public",
+    "build": "vue-tsc && vite build && mkdir ./dist/public && cp -r ./public/* ./dist/public && cp -r ./dist/* ../archive/twi/public",
     "preview": "vite preview",
-    "bp": "vue-tsc && vite build && mkdir ./dist/public && cp -r ./public/* ./dist/public && cp -r ./dist/* ../twi/public && vite preview" 
+    "bp": "vue-tsc && vite build && mkdir ./dist/public && cp -r ./public/* ./dist/public && cp -r ./dist/* ../archive/twi/public && vite preview"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
