@@ -2,9 +2,19 @@ const fs = require('fs');
 const json5 = require('json5');
 const crypto = require('crypto');
 const path = require('path')
+const {log} = require("debug");
 
-const hosting_directory = "C:\\Users\\frank\\CLionProjects\\repoForFun\\updater-server\\public\\data"
-const static_prefix = "/data"
+
+const getConfig = () => {
+    let config = undefined;
+    try {
+        config = parseJsonFromFile(path.join(__dirname, './config.json'))
+    } catch (error) {
+        console.error(error.message)
+    }
+    return config
+}
+const config = getConfig()
 
 function parseJsonFromFile(filePath) {
     try {
@@ -41,7 +51,7 @@ function generateSHAInfo(filePath) {
 
                 sha256.update(data);
                 shaInfo.push({
-                    path: static_prefix + '/' + path.relative(hosting_directory, filePath).replace(/\\/g, '/'),
+                    path: config.static_prefix + '/' + path.relative(config.hosting_directory, filePath).replace(/\\/g, '/'),
                     digest: sha256.digest('hex')
                 });
             }
@@ -71,7 +81,5 @@ function digestForSubFolders(filePath) {
 }
 
 module.exports = {
-    parseJsonFromFile, generateSHAInfo, digestForSubFolders
+    parseJsonFromFile, generateSHAInfo, digestForSubFolders, getConfig
 }
-console.log()
-digestForSubFolders("C:\\Users\\frank\\CLionProjects\\repoForFun\\updater-server\\public\\data\\versions")
