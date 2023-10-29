@@ -1,4 +1,6 @@
 {
   "hosting_directory": "C:\\Users\\frank\\CLionProjects\\repoForFun\\updater-server\\public\\data",
-  "static_prefix": "/data"
+  "static_prefix": "/data",
+  "version_metadata": "./public/data/versions/test.json",
+  "port": 3000
 }
