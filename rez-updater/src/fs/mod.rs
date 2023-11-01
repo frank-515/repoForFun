@@ -202,4 +202,11 @@ mod tests {
         temp.remove("./b/a/a/a.txt").await.unwrap();
     }
 
+    #[tokio::test]
+    async fn absolute_path() {
+        let temp = TempFolder::default();
+        temp.put("/a.txt", "frank515".as_bytes()).await.unwrap();
+        assert!(temp.exist("a.txt"));
+    }
+
 }
