@@ -34,7 +34,8 @@ function generateSHAInfo(filePath) {
         console.log(`Deleted existing ${jsonFilePath} file.`);
     }
 
-    let shaInfo = [];
+    let shaInfo = Object();
+    shaInfo.files = [];
 
     function getFiles(dir) {
         const files = fs.readdirSync(dir);
@@ -50,9 +51,10 @@ function generateSHAInfo(filePath) {
                 const data = fs.readFileSync(filePath);
 
                 sha256.update(data);
-                shaInfo.push({
+                shaInfo.files.push({
                     path: config.static_prefix + '/' + path.relative(config.hosting_directory, filePath).replace(/\\/g, '/'),
-                    digest: sha256.digest('hex')
+                    digest: sha256.digest('hex'),
+                    filename: file
                 });
             }
         }
