@@ -1,9 +1,9 @@
 use std::error::Error;
-use std::fmt::format;
-use reqwest::Client;
+use std::future::Future;
+use reqwest::{Client, Response};
 use serde::{Deserialize, Serialize};
 use crate::config::Config;
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct  HttpClient {
     http_client: Client,
     server_addr: String,
@@ -16,12 +16,13 @@ pub struct VersionMetadata {
     file_type: String,
 }
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct FileMetadata {
     pub path: String,
-    pub digest: String
+    pub digest: String,
+    pub filename: String
 }
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct FileList {
     pub files: Vec<FileMetadata>,
 }
@@ -63,7 +64,11 @@ impl HttpClient {
         Ok(file_list)
     }
 
-    pub async fn get_file<T: AsRef<[u8]>>(&self, url: T)
+    pub fn get_file<T: AsRef<str>>(&self, loc: T)  -> impl Future<Output = Result<Response, reqwest::Error>> {
+        let request_url = format!("http://{}{}", self.server_addr, loc.as_ref());
+        self.http_client.get(request_url).send()
+    }
+
 }
 
 #[cfg(test)]
