@@ -4,13 +4,13 @@ use std::path::PathBuf;
 use sha2::{Sha256, Digest}; // 使用 crate `sha2`
 
 #[derive(Debug, Clone)]
-struct Sha256Calculator {
+pub struct Sha256Calculator {
     data: Vec<u8>,
 }
 
 impl Sha256Calculator {
     // 从文件创建一个 Sha256Calculator
-    fn from_file(path: &str) -> Result<Self, std::io::Error> {
+    pub fn from_file(path: &str) -> Result<Self, std::io::Error> {
         let native_path = PathBuf::from(path);
         let mut file = File::open(native_path.to_str().unwrap())?;
         let mut buffer = vec![];
@@ -19,14 +19,14 @@ impl Sha256Calculator {
     }
 
     // 从数据创建一个 Sha256Calculator
-    fn from_data<T: AsRef<[u8]>>(data: T) -> Self {
+    pub fn from_data<T: AsRef<[u8]>>(data: T) -> Self {
         Sha256Calculator { data: data.as_ref().iter().cloned().collect() }
     }
 
 
 
     // 计算 SHA256 哈希值
-    fn calculate_hash(&self) -> String {
+    pub fn calculate_hash(&self) -> String {
         let mut hasher = Sha256::new();
         hasher.update(&self.data);
         let result = hasher.finalize();
