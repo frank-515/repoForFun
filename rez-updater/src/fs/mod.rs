@@ -5,7 +5,7 @@ use tokio::fs::File;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use crate::config::Config;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TempFolder {
     base_url: String,
 }
@@ -186,7 +186,8 @@ mod tests {
         let temp = TempFolder::default();
         temp.put("b.txt", "data".as_bytes()).await.unwrap();
         let data = temp.get_as_string(".\\b.txt").await.unwrap();
-        assert_eq!(data.as_ref(), String::from("data"));
+        // assert_eq!(data.as_ref(), String::from("data"));
+        assert_eq!(data.as_str(), "data");
     }
 
     #[tokio::test]
