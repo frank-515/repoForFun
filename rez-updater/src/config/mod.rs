@@ -6,7 +6,7 @@ use std::io::Read;
 use serde::{Deserialize, Serialize};
 use crate::config;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Config {
     pub server_addr: String,
     pub server_port: String,
