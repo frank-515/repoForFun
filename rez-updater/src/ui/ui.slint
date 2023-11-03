@@ -96,18 +96,6 @@ export component SelectVersion {
     }
 }
 
-export component UpdateDialog {
-    height: 180px;
-    width: 320px;
-    callback confirm_update();
-    callback refuse_update();
-    EasyDialog {
-        prompt: "A new version found. Do you want to update?";
-        left-text: "Ok";
-        right-text: "Not now";
-    }
-}
-
 export component InstallingDialog {
     height: 180px;
     width: 320px;
@@ -126,8 +114,18 @@ export component Demo {
     width: 320px;
     in-out property <string> current_page;
     in-out property <float> download_precentage;
-
-    if (current-page == "UpdateDialog") : UpdateDialog {}
+    callback confirm_update();
+    callback refuse_update();
+    
+    if (current-page == "UpdateDialog") : EasyDialog {
+        prompt: "A new version found. Do you want to update?";
+        left-text: "Ok";
+        right-text: "Not now";
+        enable-left: true;
+        enable-right: true;
+        onLeft => {confirm-update()}
+        onRight => {refuse-update()}
+    }
     if (current-page == "Downloading") : Downloading {
         progress-percentage: download-precentage;
 
