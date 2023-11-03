@@ -1,12 +1,5 @@
 use std::error::Error;
-use std::fmt::{Display, format};
-use std::fs::metadata;
-use std::path::PathBuf;
-use std::sync::Arc;
-use futures::future::join_all;
-use serde::de::Unexpected::Str;
-use tokio::sync::Mutex;
-use tokio::task::JoinHandle;
+use std::fmt::{Display};
 use crate::client::http_client::{FileList, HttpClient, VersionMetadata};
 use crate::config::Config;
 use crate::fs::TempFolder;
