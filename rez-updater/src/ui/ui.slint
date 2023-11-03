@@ -1,0 +1,136 @@
+import { Button, VerticalBox , HorizontalBox, ProgressIndicator, ScrollView, ListView} from "std-widgets.slint";
+
+component Downloading inherits Window  {
+    in property <float> progress_percentage;
+    height: 180px;
+    width: 320px;
+    VerticalBox {
+    spacing: 20px;
+        Text {
+            text: "Downloading";
+        }
+        HorizontalBox {
+        alignment: center;
+        spacing: 20px;
+            ProgressIndicator {
+                width: root.width * 0.6;
+                height: 15px;
+                progress: progress-percentage / 100;
+            }
+            Text {text: progress-percentage + "%";}
+        }
+        HorizontalBox {
+        alignment: end;
+        padding-right: 20px;
+            Button {
+            text: "Abort";
+            width: 80px;
+            height: 35px;
+        }
+        }
+
+    }
+}
+
+export component EasyDialog inherits Window{
+    in property <string> prompt;
+    in property <bool> enable_right;
+    in property <string> right_text;
+    in property <bool> enable_left;
+    in property <string> left_text;
+    callback onLeft();
+    callback onRight();
+    height: 180px;
+    width: 320px;
+    VerticalBox {
+    spacing: 35px;
+        HorizontalBox {
+        padding: 20px;
+        padding-top: root.height / 2 - 30px;
+            Text {text: prompt;}
+        }
+        HorizontalBox {
+        alignment: center;
+        spacing: 80px;
+        Button {
+            text: left-text;
+            width: 80px;
+            height: 35px;
+            visible: enable-left;
+            clicked => {onLeft();}
+        }
+            Button {
+            text: right-text;
+            width: 80px;
+            height: 35px;
+            visible: enable-right;
+            clicked => {onRight();}
+        }
+        }
+    }
+}
+
+export component SelectVersion {
+    in property <string> prompt;
+    in property <[string]> versions;
+    callback onSelect(string);
+    height: 180px;
+    width: 320px;
+        VerticalBox {
+            padding: 20px;
+            Text {text: "versions";}
+            ListView {
+                height: 120px;
+                for version in versions: Rectangle {
+                    height: 40px;
+                    width: root.height * 0.8;
+                Button {
+                    text: version;
+                    clicked => {
+                        onSelect(version);
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+export component UpdateDialog {
+    height: 180px;
+    width: 320px;
+    callback confirm_update();
+    callback refuse_update();
+    EasyDialog {
+        prompt: "A new version found. Do you want to update?";
+        left-text: "Ok";
+        right-text: "Not now";
+    }
+}
+
+export component InstallingDialog {
+    height: 180px;
+    width: 320px;
+    callback confirm_update();
+    callback refuse_update();
+    EasyDialog {
+        prompt: "Installing, Please wait...";
+    }
+}
+
+export struct UI_Status {
+}
+
+export component Demo {
+    height: 180px;
+    width: 320px;
+    in-out property <string> current_page;
+    in-out property <float> download_precentage;
+
+    if (current-page == "UpdateDialog") : UpdateDialog {}
+    if (current-page == "Downloading") : Downloading {
+        progress-percentage: download-precentage;
+
+    }
+    if (current-page == "Installing") : InstallingDialog{}
+}
