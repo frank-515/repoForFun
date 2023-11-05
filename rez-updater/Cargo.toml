@@ -14,6 +14,7 @@ serde_json = "1.0"
 sha2 = "0.10.8"
 futures = "0.3.28"
 slint = "1.2.2"
+zip = "0.6.6"
 
 [build-dependencies]
 slint-build = "1.2.2"
