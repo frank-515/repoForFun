@@ -20,6 +20,11 @@ impl Default for TempFolder {
 }
 impl TempFolder {
 
+    pub fn tmp_path<P: AsRef<Path>>(&self, path: P) -> PathBuf {
+        let path = path.as_ref();
+        PathBuf::from(&self.base_url).join(path)
+    }
+
     pub fn exist<P: AsRef<Path>>(&self, path: P) -> bool {
         let path = path.as_ref();
         PathBuf::from(&self.base_url).join(path).exists()
@@ -159,6 +164,7 @@ impl FileManager {
 #[cfg(test)]
 mod tests {
     use std::io::SeekFrom;
+    use std::path::Path;
     use tokio::io::{AsyncReadExt, AsyncSeekExt, AsyncWriteExt};
     use super::*;
 
@@ -210,4 +216,9 @@ mod tests {
         assert!(temp.exist("a.txt"));
     }
 
+    #[tokio::test]
+    async fn equivalentPath() {
+        let temp = TempFolder::default();
+        assert_eq!(temp.tmp_path("./a").as_path(), Path::new("./tmp/a"))
+    }
 }
