@@ -5,7 +5,7 @@ use crate::config::Config;
 use crate::fs::TempFolder;
 use crate::crypto::Sha256Calculator;
 #[derive(Debug)]
-struct FileDownloader {
+pub struct FileDownloader {
     http_client: HttpClient,
     file_list: FileList,
     version: VersionMetadata,
