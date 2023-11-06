@@ -61,8 +61,8 @@ impl TempFolder {
         FileManager::open_file(&full_path.to_str().unwrap()).await
     }
 
-    fn create_directory<P: AsRef<Path>>(&self, path: P) -> Result<(), Box<dyn std::error::Error>> {
-        fs::create_dir_all(PathBuf::from(&self.base_url).join(&path)).unwrap();
+    pub fn create_directory<P: AsRef<Path>>(&self, path: P) -> Result<(), Box<dyn std::error::Error>> {
+        fs::create_dir_all(self.tmp_path(&path))?;
         Ok(())
     }
 
@@ -223,7 +223,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn equivalentPath() {
+    async fn equivalent_path() {
         let temp = TempFolder::default();
         assert_eq!(temp.tmp_path("./a").as_path(), Path::new("./tmp/a"))
     }
