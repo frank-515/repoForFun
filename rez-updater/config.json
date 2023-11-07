@@ -1,5 +1,1 @@
-{
-  "server_addr": "localhost",
-  "server_port": "3000",
-  "tmp_dir": "./tmp"
-}
+{"server_addr":"localhost","server_port":"3000","tmp_dir":"./tmp","current_version":"0.43","execution":"a"}

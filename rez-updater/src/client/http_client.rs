@@ -12,7 +12,7 @@ pub struct  HttpClient {
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct VersionMetadata {
-    version: String,
+    pub version: String,
     file_type: String,
 }
 

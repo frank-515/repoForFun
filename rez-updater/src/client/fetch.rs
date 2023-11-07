@@ -8,7 +8,7 @@ use crate::crypto::Sha256Calculator;
 pub struct FileDownloader {
     http_client: HttpClient,
     file_list: FileList,
-    version: VersionMetadata,
+    pub version: VersionMetadata,
     concurrency: usize,
     temp: TempFolder,
     config: Config
@@ -27,6 +27,14 @@ impl FileDownloader {
             temp: TempFolder::default(),
             config: Config::default()
         })
+    }
+
+    pub fn need_update(&self) -> bool {
+        self.config.current_version != self.version.version
+    }
+    
+    pub fn update_config(&mut self) {
+        &self.config.set_current_version(String::from(&self.version.version));
     }
 
 

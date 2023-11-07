@@ -96,15 +96,6 @@ export component SelectVersion {
     }
 }
 
-export component InstallingDialog {
-    height: 180px;
-    width: 320px;
-    callback confirm_update();
-    callback refuse_update();
-    EasyDialog {
-        prompt: "Installing, Please wait...";
-    }
-}
 
 export struct UI_Status {
 }
@@ -113,10 +104,20 @@ export component Demo {
     height: 180px;
     width: 320px;
     in-out property <string> current_page;
-    in-out property <float> download_precentage;
+    in-out property <float> download_percentage;
+    in property <string> new_version;
+    in property <string> old_version;
+    in property <string> error_message;
     callback confirm_update();
-    callback refuse_update();
-    
+    callback exit();
+    callback abort_donload();
+    callback run();
+    if (current-page == "Checking") : EasyDialog {
+        prompt: "Checking for updates...";
+        enable-right: true;
+        right-text: "Exit";
+        onRight => {run();}
+    }
     if (current-page == "UpdateDialog") : EasyDialog {
         prompt: "A new version found. Do you want to update?";
         left-text: "Ok";
@@ -124,11 +125,30 @@ export component Demo {
         enable-left: true;
         enable-right: true;
         onLeft => {confirm-update()}
-        onRight => {refuse-update()}
+        onRight => {exit()}
+    }
+    if (current-page == "FetchMetadata") : EasyDialog {
+        prompt: "Fetch file list...";
+        enable-right: true;
+        right-text: "Exit";
+        onRight => {exit();}
     }
     if (current-page == "Downloading") : Downloading {
-        progress-percentage: download-precentage;
-
+        progress-percentage: download-percentage;
     }
-    if (current-page == "Installing") : InstallingDialog{}
+    if (current-page == "Installing") : EasyDialog {
+        prompt: "Running install script...";
+    }
+    if (current-page == "Finished") : EasyDialog {
+        prompt: "You has been updated to version " + new-version + ".";
+        enable-right: true;
+        right-text: "Done";
+        onRight => {run()}
+    }
+    if (current-page == "Error") : EasyDialog {
+        prompt: "An error has occurred:" + error-message;
+        enable-right: true;
+        right-text: "Exit";
+        onRight => {exit();}
+    }
 }
