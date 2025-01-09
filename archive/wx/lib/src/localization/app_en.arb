@@ -1,0 +1,6 @@
+{
+  "appTitle": "sync_music_player",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
